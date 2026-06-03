@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Únete · SAE Aero Design Ibero CDMX</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&family=Instrument+Serif:ital@0;1&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --rojo:      #EE0034;
+      --rojo-dark: #C40029;
+      --blanco:    #FFFFFF;
+      --gris:      #82786F;
+      --negro:     #0A0A0A;
+      --negro-s:   #141414;
+      --negro-c:   #1A1A1A;
+      --nav-h:     68px;
+      --ease:      cubic-bezier(0.4,0,0.2,1);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Barlow', sans-serif; background: var(--negro); color: var(--blanco); overflow-x: hidden; }
+    a { text-decoration: none; color: inherit; }
+
+    .bg-grid {
+      position: fixed; inset: 0; pointer-events: none; z-index: 0;
+      background-image:
+        linear-gradient(rgba(238,0,52,.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(238,0,52,.03) 1px, transparent 1px);
+      background-size: 52px 52px;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+      height: var(--nav-h);
+      border-bottom: 1px solid rgba(255,255,255,.06);
+      background: rgba(10,10,10,.92);
+      backdrop-filter: blur(20px);
+    }
+    .nav-inner {
+      max-width: 1200px; margin: 0 auto; padding: 0 32px;
+      height: 100%; display: flex; align-items: center; justify-content: space-between; gap: 24px;
+    }
+    .logo { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+    .logo-box { width: 34px; height: 34px; background: var(--rojo); display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: .06em; }
+    .logo-text .l1 { font-family: 'Bebas Neue', sans-serif; font-size: .9rem; letter-spacing: .1em; }
+    .logo-text .l2 { font-family: 'DM Mono', monospace; font-size: .55rem; letter-spacing: .14em; color: var(--gris); margin-top: 1px; }
+
+    .nav-links { display: flex; align-items: center; gap: 2px; list-style: none; flex: 1; justify-content: center; }
+    .nav-links a { font-family: 'DM Mono', monospace; font-size: .66rem; letter-spacing: .13em; text-transform: uppercase; color: rgba(255,255,255,.45); padding: 8px 14px; border-radius: 2px; transition: color .2s, background .2s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--blanco); background: rgba(255,255,255,.05); }
+
+    /* CTA nav — oculto por defecto, aparece cuando el botón hero sale de vista */
+    .nav-cta {
+      font-family: 'DM Mono', monospace; font-size: .66rem; letter-spacing: .13em; text-transform: uppercase;
+      color: var(--blanco); background: var(--rojo); padding: 9px 20px; flex-shrink: 0;
+      transition: background .2s, opacity .35s var(--ease), transform .35s var(--ease);
+      opacity: 0; pointer-events: none; transform: translateY(-6px);
+    }
+    .nav-cta.visible { opacity: 1; pointer-events: auto; transform: translateY(0); }
+    .nav-cta:hover { background: var(--rojo-dark); }
+
+    /* Hamburger */
+    .hamburger { display: none; flex-direction: column; justify-content: center; gap: 5.5px; cursor: pointer; padding: 8px; background: none; border: none; z-index: 60; }
+    .hamburger span { display: block; width: 22px; height: 1.5px; background: var(--blanco); transition: transform .35s var(--ease), opacity .25s; }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+    .nav-menu-mobile { display: none; position: fixed; top: var(--nav-h); right: 0; bottom: 0; width: 270px; background: rgba(10,10,10,.97); backdrop-filter: blur(24px); border-left: 1px solid rgba(255,255,255,.07); flex-direction: column; padding: 16px 0 32px; list-style: none; transform: translateX(100%); transition: transform .38s var(--ease); z-index: 55; }
+    .nav-menu-mobile.open { transform: translateX(0); }
+    .nav-menu-mobile li + li { border-top: 1px solid rgba(255,255,255,.04); }
+    .nav-menu-mobile a { font-family: 'DM Mono', monospace; font-size: .72rem; letter-spacing: .16em; text-transform: uppercase; color: rgba(255,255,255,.45); padding: 16px 28px; display: block; border-left: 2px solid transparent; transition: color .2s, border-color .2s, background .2s; }
+    .nav-menu-mobile a:hover { color: var(--blanco); border-left-color: var(--rojo); background: rgba(255,255,255,.03); }
+    .nav-menu-mobile .m-cta a { color: var(--rojo); }
+    .nav-menu-mobile .m-cta a:hover { color: var(--blanco); background: var(--rojo); border-left-color: var(--rojo); }
+
+    /* ── MAIN ── */
+    main { padding-top: var(--nav-h); position: relative; z-index: 1; }
+
+    /* ── SECCIÓN PRINCIPAL — grid izq/der ── */
+    .unete-section {
+      min-height: calc(100vh - var(--nav-h));
+      max-width: 1200px; margin: 0 auto;
+      padding: 72px 32px 80px;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+      align-items: start;
+      border-bottom: 1px solid rgba(255,255,255,.05);
+    }
+
+    /* Columna izquierda */
+    .unete-left { padding-right: 64px; border-right: 1px solid rgba(255,255,255,.05); }
+    .section-label { font-family: 'DM Mono', monospace; font-size: .64rem; letter-spacing: .24em; text-transform: uppercase; color: var(--gris); margin-bottom: 18px; }
+    .page-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(3.5rem, 8vw, 6.5rem); letter-spacing: .03em; line-height: .9; margin-bottom: 36px; }
+    .page-title span { color: var(--rojo); }
+    .unete-desc p { font-size: 1rem; line-height: 1.8; color: rgba(255,255,255,.52); margin-bottom: 16px; }
+
+    /* Nota convocatoria */
+    .conv-note {
+      margin-top: 28px; padding-top: 20px;
+      border-top: 1px solid rgba(255,255,255,.07);
+      font-family: 'DM Mono', monospace; font-size: .65rem;
+      letter-spacing: .14em; color: rgba(255,255,255,.28); line-height: 1.7;
+    }
+    .conv-note span { color: var(--rojo); }
+
+    /* Botones hero */
+    .unete-actions { display: flex; gap: 14px; margin-top: 36px; flex-wrap: wrap; }
+    .btn-primary {
+      font-family: 'DM Mono', monospace; font-size: .75rem; letter-spacing: .12em; text-transform: uppercase;
+      color: var(--blanco); background: var(--rojo); padding: 14px 28px; border: none; cursor: pointer;
+      display: inline-flex; align-items: center; gap: 8px;
+      transition: background .2s var(--ease), transform .2s;
+    }
+    .btn-primary:hover { background: var(--rojo-dark); transform: translateY(-2px); }
+    .btn-outline {
+      font-family: 'DM Mono', monospace; font-size: .75rem; letter-spacing: .12em; text-transform: uppercase;
+      color: rgba(255,255,255,.6); background: transparent; padding: 13px 24px;
+      border: 1px solid rgba(255,255,255,.2); display: inline-flex; align-items: center;
+      transition: border-color .2s, color .2s;
+    }
+    .btn-outline:hover { border-color: var(--blanco); color: var(--blanco); }
+
+    /* Columna derecha — lista de roles */
+    .roles-list { padding-left: 0; display: flex; flex-direction: column; gap: 2px; }
+    .role-item {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 22px 28px;
+      border-bottom: 1px solid rgba(255,255,255,.04);
+      cursor: pointer;
+      position: relative; overflow: hidden;
+      transition: background .25s var(--ease);
+    }
+    .role-item::before {
+      content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+      width: 2px; background: var(--rojo);
+      transform: scaleY(0); transition: transform .25s var(--ease);
+    }
+    .role-item:hover { background: var(--negro-c); }
+    .role-item:hover::before { transform: scaleY(1); }
+    .role-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.15rem; letter-spacing: .07em; }
+    .role-area { font-family: 'DM Mono', monospace; font-size: .6rem; letter-spacing: .15em; text-transform: uppercase; color: var(--rojo); margin-top: 3px; }
+    .role-arrow { color: rgba(255,255,255,.2); font-size: .85rem; transition: transform .2s, color .2s; }
+    .role-item:hover .role-arrow { transform: translateX(4px); color: var(--blanco); }
+
+    /* ── SECCIÓN FORM ── */
+    .form-section {
+      max-width: 1200px; margin: 0 auto;
+      padding: 80px 32px 100px;
+      display: grid; grid-template-columns: 1fr 1.4fr; gap: 80px; align-items: start;
+    }
+    .form-left h2 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2rem, 4vw, 3rem); letter-spacing: .04em; line-height: 1; margin-bottom: 20px; }
+    .form-left h2 span { color: var(--rojo); }
+    .form-left p { font-size: .9rem; line-height: 1.75; color: rgba(255,255,255,.45); margin-bottom: 12px; }
+    .form-note { font-family: 'DM Mono', monospace; font-size: .62rem; letter-spacing: .14em; color: rgba(255,255,255,.22); margin-top: 20px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,.06); line-height: 1.6; }
+
+    /* Formulario */
+    .form-wrap { display: flex; flex-direction: column; gap: 16px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-group { display: flex; flex-direction: column; gap: 8px; }
+    .form-label { font-family: 'DM Mono', monospace; font-size: .6rem; letter-spacing: .18em; text-transform: uppercase; color: var(--gris); }
+    .form-input, .form-select, .form-textarea {
+      background: var(--negro-c); border: 1px solid rgba(255,255,255,.08);
+      color: var(--blanco); font-family: 'Barlow', sans-serif; font-size: .9rem;
+      padding: 13px 16px; width: 100%; outline: none; transition: border-color .2s;
+    }
+    .form-input::placeholder, .form-textarea::placeholder { color: rgba(255,255,255,.22); }
+    .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: rgba(238,0,52,.5); }
+    .form-textarea { min-height: 110px; resize: vertical; }
+    .form-select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2382786F' stroke-width='1.5' fill='none'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 16px center; cursor: pointer; }
+    .form-select option { background: var(--negro); }
+    .btn-submit {
+      font-family: 'DM Mono', monospace; font-size: .75rem; letter-spacing: .14em; text-transform: uppercase;
+      color: var(--blanco); background: var(--rojo); border: none; cursor: pointer;
+      padding: 16px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px;
+      transition: background .2s, transform .2s;
+    }
+    .btn-submit:hover { background: var(--rojo-dark); transform: translateY(-1px); }
+
+    /* ── FOOTER ── */
+    footer { background: var(--negro-s); border-top: 1px solid rgba(255,255,255,.05); padding: 60px 0 32px; position: relative; z-index: 2; }
+    .footer-inner { max-width: 1200px; margin: 0 auto; padding: 0 32px; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 48px; }
+    .footer-brand-logo { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+    .footer-brand p { font-size: .85rem; line-height: 1.7; color: rgba(255,255,255,.35); max-width: 260px; }
+    .footer-col h4 { font-family: 'DM Mono', monospace; font-size: .63rem; letter-spacing: .2em; text-transform: uppercase; color: var(--gris); margin-bottom: 20px; }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+    .footer-col ul li a { font-size: .85rem; color: rgba(255,255,255,.38); transition: color .2s; }
+    .footer-col ul li a:hover { color: var(--blanco); }
+    .footer-bottom { max-width: 1200px; margin: 0 auto; padding: 24px 32px 0; border-top: 1px solid rgba(255,255,255,.05); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+    .footer-bottom p { font-family: 'DM Mono', monospace; font-size: .6rem; letter-spacing: .14em; text-transform: uppercase; color: rgba(255,255,255,.2); }
+    .footer-bottom a { color: var(--rojo); }
+
+    /* Animaciones */
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity .7s var(--ease), transform .7s var(--ease); }
+    .reveal.on { opacity: 1; transform: translateY(0); }
+    .reveal.d1 { transition-delay: .1s; } .reveal.d2 { transition-delay: .2s; } .reveal.d3 { transition-delay: .3s; }
+
+    /* Mobile */
+    @media (max-width: 860px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .nav-menu-mobile { display: flex; }
+      .unete-section { grid-template-columns: 1fr; }
+      .unete-left { padding-right: 0; border-right: none; border-bottom: 1px solid rgba(255,255,255,.05); padding-bottom: 48px; margin-bottom: 0; }
+      .form-section { grid-template-columns: 1fr; gap: 48px; }
+      .form-row { grid-template-columns: 1fr; }
+      .footer-inner { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 500px) {
+      .footer-inner { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="bg-grid"></div>
+
+<!-- ── NAV ── -->
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="logo">
+      <div class="logo-box">AD</div>
+      <div class="logo-text">
+        <div class="l1">SAE Aero Design</div>
+        <div class="l2">Ibero CDMX · 2027</div>
+      </div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="proyecto.html">Proyecto</a></li>
+      <li><a href="competencia.html">SAE</a></li>
+      <li><a href="areas.html">Áreas</a></li>
+      <li><a href="cronograma.html">Cronograma</a></li>
+      <li><a href="avances.html">Avances</a></li>
+      <li><a href="patrocinios.html">Patrocinios</a></li>
+    </ul>
+    <!-- CTA aparece solo cuando el botón hero sale de pantalla -->
+    <a href="#aplicar" class="nav-cta" id="navCta">Aplicar ahora →</a>
+    <button class="hamburger" id="burger" aria-label="Abrir menú" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+<ul class="nav-menu-mobile" id="navMenu">
+  <li><a href="proyecto.html">Proyecto</a></li>
+  <li><a href="competencia.html">SAE</a></li>
+  <li><a href="areas.html">Áreas</a></li>
+  <li><a href="cronograma.html">Cronograma</a></li>
+  <li><a href="avances.html">Avances</a></li>
+  <li><a href="patrocinios.html">Patrocinios</a></li>
+  <li class="m-cta"><a href="#aplicar">Aplicar ahora →</a></li>
+</ul>
+
+<main>
+
+  <!-- ── SECCIÓN PRINCIPAL ── -->
+  <section class="unete-section">
+
+    <!-- Izquierda -->
+    <div class="unete-left">
+      <p class="section-label reveal">// 06 · Convocatoria</p>
+      <h1 class="page-title reveal d1">Únete al<br><span>equipo</span></h1>
+      <div class="unete-desc reveal d2">
+        <p>Buscamos estudiantes comprometidos, curiosos y con ganas de aprender haciendo. No necesitas ser experto — necesitas querer construir algo real.</p>
+        <p>Aplica a cualquiera de las áreas del equipo. Todas las disciplinas de ingeniería y física son bienvenidas.</p>
+      </div>
+      <div class="conv-note reveal d2">
+        <span>→</span> Convocatoria abierta · Universidad Iberoamericana Ciudad de México<br>
+        Período: <span>[editar fecha de convocatoria]</span>
+      </div>
+      <!-- Este es el botón que controla el CTA del nav -->
+      <div class="unete-actions reveal d3">
+        <a href="#aplicar" class="btn-primary" id="heroCta">Aplicar ahora →</a>
+        <a href="areas.html" class="btn-outline">Ver áreas</a>
+      </div>
+    </div>
+
+    <!-- Derecha — roles -->
+    <div class="roles-list reveal d1">
+      <div class="role-item">
+        <div>
+          <div class="role-name">Ingeniero Aerodinámico</div>
+          <div class="role-area">// Aerodinámica</div>
+        </div>
+        <span class="role-arrow">→</span>
+      </div>
+      <div class="role-item">
+        <div>
+          <div class="role-name">Diseñador Estructural</div>
+          <div class="role-area">// Estructuras</div>
+        </div>
+        <span class="role-arrow">→</span>
+      </div>
+      <div class="role-item">
+        <div>
+          <div class="role-name">Especialista en Propulsión</div>
+          <div class="role-area">// Propulsión</div>
+        </div>
+        <span class="role-arrow">→</span>
+      </div>
+      <div class="role-item">
+        <div>
+          <div class="role-name">Estabilidad y Control</div>
+          <div class="role-area">// S&C</div>
+        </div>
+        <span class="role-arrow">→</span>
+      </div>
+      <div class="role-item">
+        <div>
+          <div class="role-name">Técnico en Manufactura</div>
+          <div class="role-area">// Manufactura</div>
+        </div>
+        <span class="role-arrow">→</span>
+      </div>
+      <div class="role-item">
+        <div>
+          <div class="role-name">Electrónica y RC</div>
+          <div class="role-area">// Electrónica</div>
+        </div>
+        <span class="role-arrow">→</span>
+      </div>
+      <div class="role-item">
+        <div>
+          <div class="role-name">Documentación Técnica</div>
+          <div class="role-area">// Doc</div>
+        </div>
+        <span class="role-arrow">→</span>
+      </div>
+      <div class="role-item">
+        <div>
+          <div class="role-name">Finanzas y Patrocinios</div>
+          <div class="role-area">// Gestión</div>
+        </div>
+        <span class="role-arrow">→</span>
+      </div>
+      <div class="role-item">
+        <div>
+          <div class="role-name">Comunicación y Difusión</div>
+          <div class="role-area">// Comm</div>
+        </div>
+        <span class="role-arrow">→</span>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ── FORMULARIO ── -->
+  <section class="form-section" id="aplicar">
+    <div class="form-left reveal">
+      <h2>Llena el<br><span>formulario.</span></h2>
+      <br>
+      <p>Cuéntanos sobre ti — carrera, semestre y el área que te interesa.
+      <p>No hay requisitos de experiencia previa. Solo necesitamos saber que tienes compromiso.</p>
+      <div class="form-note">
+        <!--
+          INSTRUCCIONES GOOGLE FORMS:
+          1. Crea un Google Form con: Nombre, Correo, Carrera,
+             Semestre, Área de interés, Motivación
+          2. Reemplaza action="" con tu URL de formResponse
+          3. Reemplaza cada name="entry.XXX" con los IDs reales
+          4. Comparte el link directo del form también aquí abajo
+        -->
+        Los datos se guardan en Google Forms / Sheets del equipo.<br>
+        También puedes aplicar <a href="https://docs.google.com/forms/d/e/1FAIpQLSc0WCkBBUsim0WcBbpnl-fZWqX37rJd-RFArzn7ut2gKvThmQ/viewform?usp=publish-editor" target="_blank" style="color:rgba(238,0,52,.7);">directamente aquí →</a>
+      </div>
+    </div>
+
+    <div class="reveal d1">
+      <form
+        class="form-wrap"
+        action="https://docs.google.com/forms/d/e/1FAIpQLSc0WCkBBUsim0WcBbpnl-fZWqX37rJd-RFArzn7ut2gKvThmQ/formResponse"
+        method="POST"
+        target="_blank"
+        onsubmit="handleSubmit(event)"
+      >
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Nombre completo</label>
+            <input type="text" class="form-input" name="entry.1727990998" placeholder="Tu nombre" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Correo electrónico</label>
+            <input type="email" class="form-input" name="entry.1335608545" placeholder="correo@ibero.mx" required />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Carrera</label>
+            <input type="text" class="form-input" name="entry.275506724 placeholder="Ej. Ing. Industrial" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Semestre</label>
+            <select class="form-select" name="entry.118489917">
+              <option value="" disabled selected>Selecciona</option>
+              <option>1° semestre</option>
+              <option>2° semestre</option>
+              <option>3° semestre</option>
+              <option>4° semestre</option>
+              <option>5° semestre</option>
+              <option>6° semestre</option>
+              <option>7° semestre</option>
+              <option>8° semestre o más</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Área de interés</label>
+          <select class="form-select" name="entry.1539948591" required>
+            <option value="" disabled selected>Selecciona un área</option>
+            <option>Aerodinámica</option>
+            <option>Estructuras</option>
+            <option>Propulsión</option>
+            <option>Estabilidad y Control</option>
+            <option>Manufactura</option>
+            <option>Electrónica y RC</option>
+            <option>Documentación Técnica</option>
+            <option>Finanzas y Patrocinios</option>
+            <option>Comunicación y Difusión</option>
+            <option>No sé todavía — quiero explorar</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">¿Por qué quieres unirte?</label>
+          <textarea class="form-textarea" name="entry.21041841" placeholder="Cuéntanos en unas líneas..."></textarea>
+        </div>
+        <button type="submit" class="btn-submit" id="submitBtn">Enviar solicitud →</button>
+      </form>
+    </div>
+  </section>
+
+</main>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="footer-brand-logo">
+        <div class="logo-box">AD</div>
+        <div class="logo-text">
+          <div class="l1">SAE Aero Design</div>
+          <div class="l2">Ibero CDMX · 2027</div>
+        </div>
+      </div>
+      <p>Equipo estudiantil de ingeniería aeronáutica de la Universidad Iberoamericana Ciudad de México. Primera participación en SAE Aero Design.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Proyecto</h4>
+      <ul>
+        <li><a href="proyecto.html">Sobre el proyecto</a></li>
+        <li><a href="competencia.html">SAE Aero Design</a></li>
+        <li><a href="competencia.html#micro">Clase Micro</a></li>
+        <li><a href="cronograma.html">Cronograma</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Equipo</h4>
+      <ul>
+        <li><a href="areas.html">Áreas de trabajo</a></li>
+        <li><a href="unete.html">Únete</a></li>
+        <li><a href="avances.html">Avances</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Colabora</h4>
+      <ul>
+        <li><a href="patrocinios.html">Patrocinios</a></li>
+        <li><a href="patrocinios.html#contacto">Contacto</a></li>
+        <li><a href="#">Instagram</a></li>
+        <li><a href="#">LinkedIn</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 SAE Aero Design · Ibero CDMX</p>
+    <p>Universidad Iberoamericana · <a href="#">DEII</a></p>
+  </div>
+</footer>
+
+<script>
+  // ── Nav móvil
+  const burger  = document.getElementById('burger');
+  const navMenu = document.getElementById('navMenu');
+  burger.addEventListener('click', function(e) {
+    e.stopPropagation();
+    const isOpen = navMenu.classList.toggle('open');
+    burger.classList.toggle('open', isOpen);
+    burger.setAttribute('aria-expanded', isOpen);
+  });
+  document.addEventListener('click', function(e) {
+    if (!navMenu.contains(e.target) && !burger.contains(e.target)) {
+      navMenu.classList.remove('open');
+      burger.classList.remove('open');
+    }
+  });
+
+  // ── CTA nav: aparece cuando el botón hero sale de la vista
+  const heroCta = document.getElementById('heroCta');
+  const navCta  = document.getElementById('navCta');
+  const ctaObserver = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      // Si el botón hero NO es visible → mostrar CTA en nav
+      navCta.classList.toggle('visible', !e.isIntersecting);
+    });
+  }, { threshold: 0.5 });
+  ctaObserver.observe(heroCta);
+
+  // ── Scroll reveal
+  const els = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('on'); io.unobserve(e.target); } });
+  }, { threshold: 0.08 });
+  els.forEach(el => io.observe(el));
+
+  // ── Submit feedback
+  function handleSubmit(e) {
+    const btn = document.getElementById('submitBtn');
+    btn.textContent = 'Enviando...';
+    btn.style.background = '#333';
+    setTimeout(() => {
+      btn.textContent = 'Solicitud enviada ✓';
+      btn.style.background = '#1a5c1a';
+    }, 800);
+  }
+</script>
+
+</body>
+</html>

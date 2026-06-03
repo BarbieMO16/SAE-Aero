@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Áreas · SAE Aero Design Ibero CDMX</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&family=Instrument+Serif:ital@0;1&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --rojo:      #EE0034;
+      --rojo-dark: #C40029;
+      --blanco:    #FFFFFF;
+      --gris:      #82786F;
+      --negro:     #0A0A0A;
+      --negro-s:   #141414;
+      --negro-c:   #1A1A1A;
+      --nav-h:     68px;
+      --ease:      cubic-bezier(0.4,0,0.2,1);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Barlow', sans-serif; background: var(--negro); color: var(--blanco); overflow-x: hidden; }
+    a { text-decoration: none; color: inherit; }
+
+    .bg-grid {
+      position: fixed; inset: 0; pointer-events: none; z-index: 0;
+      background-image:
+        linear-gradient(rgba(238,0,52,.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(238,0,52,.03) 1px, transparent 1px);
+      background-size: 52px 52px;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+      height: var(--nav-h);
+      border-bottom: 1px solid rgba(255,255,255,.06);
+      background: rgba(10,10,10,.92);
+      backdrop-filter: blur(20px);
+    }
+    .nav-inner {
+      max-width: 1200px; margin: 0 auto; padding: 0 32px;
+      height: 100%; display: flex; align-items: center; justify-content: space-between; gap: 24px;
+    }
+    .logo { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+    .logo-box { width: 34px; height: 34px; background: var(--rojo); display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: .06em; }
+    .logo-text .l1 { font-family: 'Bebas Neue', sans-serif; font-size: .9rem; letter-spacing: .1em; }
+    .logo-text .l2 { font-family: 'DM Mono', monospace; font-size: .55rem; letter-spacing: .14em; color: var(--gris); margin-top: 1px; }
+    .nav-links { display: flex; align-items: center; gap: 2px; list-style: none; flex: 1; justify-content: center; }
+    .nav-links a { font-family: 'DM Mono', monospace; font-size: .66rem; letter-spacing: .13em; text-transform: uppercase; color: rgba(255,255,255,.45); padding: 8px 14px; border-radius: 2px; transition: color .2s, background .2s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--blanco); background: rgba(255,255,255,.05); }
+    .nav-cta { font-family: 'DM Mono', monospace; font-size: .66rem; letter-spacing: .13em; text-transform: uppercase; color: var(--blanco); background: var(--rojo); padding: 9px 20px; flex-shrink: 0; transition: background .2s; }
+    .nav-cta:hover { background: var(--rojo-dark); }
+    .hamburger { display: none; flex-direction: column; justify-content: center; gap: 5.5px; cursor: pointer; padding: 8px; background: none; border: none; z-index: 60; }
+    .hamburger span { display: block; width: 22px; height: 1.5px; background: var(--blanco); transition: transform .35s var(--ease), opacity .25s; }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+    .nav-menu-mobile { display: none; position: fixed; top: var(--nav-h); right: 0; bottom: 0; width: 270px; background: rgba(10,10,10,.97); backdrop-filter: blur(24px); border-left: 1px solid rgba(255,255,255,.07); flex-direction: column; padding: 16px 0 32px; list-style: none; transform: translateX(100%); transition: transform .38s var(--ease); z-index: 55; }
+    .nav-menu-mobile.open { transform: translateX(0); }
+    .nav-menu-mobile li + li { border-top: 1px solid rgba(255,255,255,.04); }
+    .nav-menu-mobile a { font-family: 'DM Mono', monospace; font-size: .72rem; letter-spacing: .16em; text-transform: uppercase; color: rgba(255,255,255,.45); padding: 16px 28px; display: block; border-left: 2px solid transparent; transition: color .2s, border-color .2s, background .2s; }
+    .nav-menu-mobile a:hover { color: var(--blanco); border-left-color: var(--rojo); background: rgba(255,255,255,.03); }
+    .nav-menu-mobile .m-cta a { color: var(--rojo); }
+    .nav-menu-mobile .m-cta a:hover { color: var(--blanco); background: var(--rojo); border-left-color: var(--rojo); }
+
+    /* ── CONTENIDO ── */
+    main { padding-top: var(--nav-h); position: relative; z-index: 1; }
+
+    /* ── HERO INTERIOR ── */
+    .page-hero {
+      max-width: 1200px; margin: 0 auto;
+      padding: 90px 32px 80px;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: end;
+      border-bottom: 1px solid rgba(255,255,255,.05);
+    }
+    .section-label { font-family: 'DM Mono', monospace; font-size: .64rem; letter-spacing: .24em; text-transform: uppercase; color: var(--gris); margin-bottom: 20px; }
+    .page-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(3.5rem, 8vw, 7rem); letter-spacing: .03em; line-height: .9; }
+    .page-title span { color: var(--rojo); }
+    .page-intro { font-family: 'Instrument Serif', serif; font-style: italic; font-size: clamp(1.1rem, 2vw, 1.4rem); color: rgba(255,255,255,.55); line-height: 1.6; margin-bottom: 20px; }
+    .page-desc { font-size: .95rem; line-height: 1.8; color: rgba(255,255,255,.45); }
+
+    /* ── NÚMERO TOTAL ── */
+    .total-strip {
+      border-bottom: 1px solid rgba(255,255,255,.05);
+      padding: 36px 32px;
+    }
+    .total-inner {
+      max-width: 1200px; margin: 0 auto;
+      display: flex; align-items: center; gap: 32px;
+    }
+    .total-num { font-family: 'Bebas Neue', sans-serif; font-size: 4rem; color: var(--rojo); line-height: 1; }
+    .total-text { font-family: 'DM Mono', monospace; font-size: .68rem; letter-spacing: .2em; text-transform: uppercase; color: var(--gris); }
+    .total-line { flex: 1; height: 1px; background: rgba(255,255,255,.06); }
+
+    /* ── GRID DE ÁREAS ── */
+    .areas-section { padding: 80px 32px; }
+    .areas-inner { max-width: 1200px; margin: 0 auto; }
+    .areas-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 2px; background: rgba(255,255,255,.03);
+      border: 1px solid rgba(255,255,255,.04);
+    }
+
+    .area-card {
+      background: var(--negro);
+      padding: 40px 32px;
+      position: relative; overflow: hidden;
+      cursor: pointer;
+      transition: background .3s var(--ease);
+    }
+    .area-card::after {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: var(--rojo); transform: scaleX(0);
+      transition: transform .35s var(--ease); transform-origin: left;
+    }
+    .area-card:hover { background: var(--negro-c); }
+    .area-card:hover::after { transform: scaleX(1); }
+
+    .area-code {
+      font-family: 'DM Mono', monospace; font-size: .6rem; letter-spacing: .2em;
+      text-transform: uppercase; color: var(--rojo);
+      margin-bottom: 20px; display: block;
+    }
+    .area-icon-wrap {
+      width: 44px; height: 44px; margin-bottom: 20px;
+      border: 1px solid rgba(238,0,52,.25);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; color: var(--rojo);
+      transition: background .3s, border-color .3s;
+    }
+    .area-card:hover .area-icon-wrap { background: rgba(238,0,52,.08); border-color: rgba(238,0,52,.5); }
+
+    .area-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; letter-spacing: .07em; margin-bottom: 14px; }
+    .area-desc { font-size: .87rem; line-height: 1.7; color: rgba(255,255,255,.42); margin-bottom: 20px; }
+
+    .area-skills { display: flex; flex-wrap: wrap; gap: 6px; }
+    .skill-tag {
+      font-family: 'DM Mono', monospace; font-size: .58rem; letter-spacing: .12em; text-transform: uppercase;
+      color: rgba(255,255,255,.3); border: 1px solid rgba(255,255,255,.08);
+      padding: 3px 8px;
+      transition: color .2s, border-color .2s;
+    }
+    .area-card:hover .skill-tag { color: rgba(255,255,255,.5); border-color: rgba(255,255,255,.15); }
+
+    /* ── SECCIÓN CÓMO TRABAJAMOS ── */
+    .como {
+      background: var(--negro-s);
+      border-top: 1px solid rgba(255,255,255,.04);
+      border-bottom: 1px solid rgba(255,255,255,.04);
+      padding: 100px 32px;
+    }
+    .como-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+    .como-text h2 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.2rem, 4.5vw, 3.4rem); letter-spacing: .04em; line-height: 1; margin-bottom: 24px; }
+    .como-text h2 span { color: var(--rojo); }
+    .como-text p { font-size: .95rem; line-height: 1.8; color: rgba(255,255,255,.5); margin-bottom: 16px; }
+    .como-steps { display: flex; flex-direction: column; gap: 2px; }
+    .step {
+      background: var(--negro-c); border: 1px solid rgba(255,255,255,.04);
+      padding: 24px 28px; display: grid; grid-template-columns: 48px 1fr; gap: 16px; align-items: start;
+      transition: border-color .3s, transform .3s;
+    }
+    .step:hover { border-color: rgba(238,0,52,.25); transform: translateX(4px); }
+    .step-num { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; color: rgba(238,0,52,.3); line-height: 1; }
+    .step h3 { font-family: 'Bebas Neue', sans-serif; font-size: 1.15rem; letter-spacing: .06em; margin-bottom: 6px; }
+    .step p { font-size: .85rem; line-height: 1.65; color: rgba(255,255,255,.4); }
+
+    /* ── CTA ── */
+    .cta-final { background: var(--rojo); padding: 80px 32px; text-align: center; position: relative; overflow: hidden; }
+    .cta-bg { position: absolute; inset: 0; font-family: 'Bebas Neue', sans-serif; font-size: 18rem; color: rgba(0,0,0,.1); display: flex; align-items: center; justify-content: center; pointer-events: none; user-select: none; line-height: 1; }
+    .cta-inner { position: relative; z-index: 1; max-width: 600px; margin: 0 auto; }
+    .cta-inner h2 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.5rem, 6vw, 4.5rem); letter-spacing: .04em; margin-bottom: 16px; }
+    .cta-inner p { font-size: 1rem; color: rgba(255,255,255,.82); margin-bottom: 36px; line-height: 1.7; }
+    .btn-white { font-family: 'DM Mono', monospace; font-size: .75rem; letter-spacing: .12em; text-transform: uppercase; color: var(--rojo); background: var(--blanco); padding: 14px 32px; display: inline-flex; align-items: center; gap: 8px; transition: transform .2s var(--ease), box-shadow .2s; }
+    .btn-white:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,.3); }
+
+    /* ── FOOTER ── */
+    footer { background: var(--negro-s); border-top: 1px solid rgba(255,255,255,.05); padding: 60px 0 32px; position: relative; z-index: 2; }
+    .footer-inner { max-width: 1200px; margin: 0 auto; padding: 0 32px; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 48px; }
+    .footer-brand-logo { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+    .footer-brand p { font-size: .85rem; line-height: 1.7; color: rgba(255,255,255,.35); max-width: 260px; }
+    .footer-col h4 { font-family: 'DM Mono', monospace; font-size: .63rem; letter-spacing: .2em; text-transform: uppercase; color: var(--gris); margin-bottom: 20px; }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+    .footer-col ul li a { font-size: .85rem; color: rgba(255,255,255,.38); transition: color .2s; }
+    .footer-col ul li a:hover { color: var(--blanco); }
+    .footer-bottom { max-width: 1200px; margin: 0 auto; padding: 24px 32px 0; border-top: 1px solid rgba(255,255,255,.05); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+    .footer-bottom p { font-family: 'DM Mono', monospace; font-size: .6rem; letter-spacing: .14em; text-transform: uppercase; color: rgba(255,255,255,.2); }
+    .footer-bottom a { color: var(--rojo); }
+
+    /* Animaciones */
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity .7s var(--ease), transform .7s var(--ease); }
+    .reveal.on { opacity: 1; transform: translateY(0); }
+    .reveal.d1 { transition-delay: .1s; } .reveal.d2 { transition-delay: .2s; }
+    .reveal.d3 { transition-delay: .3s; } .reveal.d4 { transition-delay: .4s; }
+    .reveal.d5 { transition-delay: .5s; } .reveal.d6 { transition-delay: .6s; }
+
+    /* Mobile */
+    @media (max-width: 860px) {
+      .nav-links, .nav-cta { display: none; }
+      .hamburger { display: flex; }
+      .nav-menu-mobile { display: flex; }
+      .page-hero, .como-inner { grid-template-columns: 1fr; gap: 40px; }
+      .areas-grid { grid-template-columns: 1fr 1fr; }
+      .footer-inner { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 600px) {
+      .areas-grid { grid-template-columns: 1fr; }
+      .footer-inner { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="bg-grid"></div>
+
+<!-- ── NAV ── -->
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="logo">
+      <div class="logo-box">AD</div>
+      <div class="logo-text">
+        <div class="l1">SAE Aero Design</div>
+        <div class="l2">Ibero CDMX · 2027</div>
+      </div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="proyecto.html">Proyecto</a></li>
+      <li><a href="competencia.html">SAE</a></li>
+      <li><a href="areas.html" class="active">Áreas</a></li>
+      <li><a href="cronograma.html">Cronograma</a></li>
+      <li><a href="avances.html">Avances</a></li>
+      <li><a href="patrocinios.html">Patrocinios</a></li>
+    </ul>
+    <a href="unete.html" class="nav-cta">Únete al equipo →</a>
+    <button class="hamburger" id="burger" aria-label="Abrir menú" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+<ul class="nav-menu-mobile" id="navMenu">
+  <li><a href="proyecto.html">Proyecto</a></li>
+  <li><a href="competencia.html">Competencia</a></li>
+  <li><a href="areas.html">Áreas</a></li>
+  <li><a href="cronograma.html">Cronograma</a></li>
+  <li><a href="avances.html">Avances</a></li>
+  <li><a href="patrocinios.html">Patrocinios</a></li>
+  <li class="m-cta"><a href="unete.html">Únete al equipo →</a></li>
+</ul>
+
+<main>
+
+  <!-- ── HERO ── -->
+  <div class="page-hero reveal">
+    <div>
+      <p class="section-label">// Estructura del equipo</p>
+      <h1 class="page-title">Áreas de<br><span>trabajo.</span></h1>
+    </div>
+    <div>
+      <p class="page-intro">Nueve áreas especializadas que cubren todo el ciclo de vida de la aeronave.</p>
+      <p class="page-desc">Desde el primer trazo de diseño hasta el vuelo en competencia, cada área tiene un rol crítico. El equipo funciona como una pequeña empresa de ingeniería aeronáutica.</p>
+    </div>
+  </div>
+
+  <!-- ── STRIP TOTAL ── -->
+  <div class="total-strip reveal">
+    <div class="total-inner">
+      <div class="total-num">9</div>
+      <div class="total-text">Áreas<br>especializadas</div>
+      <div class="total-line"></div>
+      <div class="total-text" style="text-align:right;">Técnicas · Gestión<br>Comunicación</div>
+    </div>
+  </div>
+
+  <!-- ── ÁREAS ── -->
+  <section class="areas-section">
+    <div class="areas-inner">
+      <div class="areas-grid">
+
+        <div class="area-card reveal">
+          <span class="area-code">// AERO</span>
+          <div class="area-icon-wrap">⬡</div>
+          <div class="area-name">Aerodinámica</div>
+          <p class="area-desc">Diseño de perfiles alares, análisis CFD, optimización de sustentación y arrastre. Responsable de la geometría alar y el desempeño aerodinámico global.</p>
+          <div class="area-skills">
+            <span class="skill-tag">CFD</span>
+            <span class="skill-tag">XFLR5</span>
+            <span class="skill-tag">Perfiles NACA</span>
+            <span class="skill-tag">OpenVSP</span>
+          </div>
+        </div>
+
+        <div class="area-card reveal d1">
+          <span class="area-code">// STR</span>
+          <div class="area-icon-wrap">◫</div>
+          <div class="area-name">Estructuras</div>
+          <p class="area-desc">Análisis de cargas, selección de materiales, diseño de fuselaje y empenaje. Garantiza que la aeronave soporte las fuerzas de vuelo sin exceder el peso máximo.</p>
+          <div class="area-skills">
+            <span class="skill-tag">FEM</span>
+            <span class="skill-tag">Compuestos</span>
+            <span class="skill-tag">CAD</span>
+            <span class="skill-tag">Balsa / Carbono</span>
+          </div>
+        </div>
+
+        <div class="area-card reveal d2">
+          <span class="area-code">// PROP</span>
+          <div class="area-icon-wrap">↻</div>
+          <div class="area-name">Propulsión</div>
+          <p class="area-desc">Selección de motor, hélice y batería. Análisis de empuje, consumo energético y autonomía de vuelo para cumplir los requisitos de la misión.</p>
+          <div class="area-skills">
+            <span class="skill-tag">Motores BLDC</span>
+            <span class="skill-tag">ESC</span>
+            <span class="skill-tag">LiPo</span>
+            <span class="skill-tag">Análisis de empuje</span>
+          </div>
+        </div>
+
+        <div class="area-card reveal">
+          <span class="area-code">// S&C</span>
+          <div class="area-icon-wrap">⊕</div>
+          <div class="area-name">Estabilidad y Control</div>
+          <p class="area-desc">Diseño de superficies de control, análisis de estabilidad estática y dinámica. Asegura que la aeronave sea controlable en todas las fases del vuelo.</p>
+          <div class="area-skills">
+            <span class="skill-tag">Estabilidad estática</span>
+            <span class="skill-tag">Servos</span>
+            <span class="skill-tag">CG / CP</span>
+          </div>
+        </div>
+
+        <div class="area-card reveal d1">
+          <span class="area-code">// MFG</span>
+          <div class="area-icon-wrap">⚒</div>
+          <div class="area-name">Manufactura</div>
+          <p class="area-desc">Construcción física de la aeronave: corte, pegado, laminado y ensamble. Traduce el diseño en papel a un objeto real que vuela.</p>
+          <div class="area-skills">
+            <span class="skill-tag">Laminado</span>
+            <span class="skill-tag">Corte CNC</span>
+            <span class="skill-tag">Fibra de vidrio</span>
+            <span class="skill-tag">Epóxico</span>
+          </div>
+        </div>
+
+        <div class="area-card reveal d2">
+          <span class="area-code">// ELEC</span>
+          <div class="area-icon-wrap">⚡</div>
+          <div class="area-name">Electrónica y RC</div>
+          <p class="area-desc">Integración electrónica del sistema RC, programación de controladores y pruebas de radio control. El sistema nervioso de la aeronave.</p>
+          <div class="area-skills">
+            <span class="skill-tag">Arduino</span>
+            <span class="skill-tag">Radio RC</span>
+            <span class="skill-tag">Telemetría</span>
+            <span class="skill-tag">PWM</span>
+          </div>
+        </div>
+
+        <div class="area-card reveal">
+          <span class="area-code">// DOC</span>
+          <div class="area-icon-wrap">≡</div>
+          <div class="area-name">Documentación Técnica</div>
+          <p class="area-desc">Redacción del reporte de diseño SAE, presentaciones de ingeniería y memorias de cálculo. El reporte técnico vale hasta el 30% del puntaje final.</p>
+          <div class="area-skills">
+            <span class="skill-tag">LaTeX</span>
+            <span class="skill-tag">Reporte SAE</span>
+            <span class="skill-tag">Presentaciones</span>
+          </div>
+        </div>
+
+        <div class="area-card reveal d1">
+          <span class="area-code">// FIN</span>
+          <div class="area-icon-wrap">◈</div>
+          <div class="area-name">Finanzas y Patrocinios</div>
+          <p class="area-desc">Gestión del presupuesto, búsqueda de patrocinadores y administración de recursos. Hace posible que el proyecto exista.</p>
+          <div class="area-skills">
+            <span class="skill-tag">Presupuesto</span>
+            <span class="skill-tag">Propuestas</span>
+            <span class="skill-tag">Gestión</span>
+          </div>
+        </div>
+
+        <div class="area-card reveal d2">
+          <span class="area-code">// COMM</span>
+          <div class="area-icon-wrap">◎</div>
+          <div class="area-name">Comunicación</div>
+          <p class="area-desc">Difusión del proyecto, redes sociales, reclutamiento y representación institucional. La voz del equipo hacia la comunidad universitaria y el exterior.</p>
+          <div class="area-skills">
+            <span class="skill-tag">Redes sociales</span>
+            <span class="skill-tag">Diseño gráfico</span>
+            <span class="skill-tag">Relaciones</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CÓMO TRABAJAMOS ── -->
+  <section class="como">
+    <div class="como-inner">
+      <div class="como-text reveal">
+        <p class="section-label">// Dinámica del equipo</p>
+        <h2>Cómo<br>trabajamos<br><span>juntos.</span></h2>
+        <br>
+        <p>Las áreas no operan de forma aislada — cada decisión de una impacta a las demás. Aerodinámica define la geometría, Estructuras asegura que aguante, Propulsión calcula el empuje necesario y Manufactura lo construye.</p>
+        <p>Nos reunimos semanalmente en sesiones plenarias y cada área tiene sus propias sesiones de trabajo. El equipo completo revisa hitos de diseño en conjunto.</p>
+      </div>
+      <div class="como-steps reveal d1">
+        <div class="step">
+          <div class="step-num">01</div>
+          <div>
+            <h3>Diseño conceptual</h3>
+            <p>Todas las áreas técnicas trabajan en paralelo definiendo la configuración inicial. Se hacen trade-offs entre peso, arrastre, carga y propulsión.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">02</div>
+          <div>
+            <h3>Revisiones de diseño</h3>
+            <p>Puntos de control formales donde cada área presenta su avance al equipo completo. Se detectan conflictos entre subsistemas y se toman decisiones.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">03</div>
+          <div>
+            <h3>Manufactura integrada</h3>
+            <p>El área de manufactura trabaja con cada área técnica para asegurar que los diseños sean fabricables con los materiales y herramientas disponibles.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">04</div>
+          <div>
+            <h3>Pruebas y cierre</h3>
+            <p>Pruebas de vuelo documentadas, iteraciones finales y preparación del reporte técnico SAE. Todo el equipo contribuye a los entregables finales.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CTA ── -->
+  <section class="cta-final">
+    <div class="cta-bg">TEAM</div>
+    <div class="cta-inner reveal">
+      <h2>Encuentra tu área.</h2>
+      <p>Hay un lugar para cada disciplina. Ingeniería mecánica, eléctrica, física, administración, diseño — todas son esenciales para llegar a la competencia.</p>
+      <a href="unete.html" class="btn-white">Aplicar ahora →</a>
+    </div>
+  </section>
+
+</main>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="footer-brand-logo">
+        <div class="logo-box">AD</div>
+        <div class="logo-text">
+          <div class="l1">SAE Aero Design</div>
+          <div class="l2">Ibero Ciudad de México · 2027</div>
+        </div>
+      </div>
+      <p>Equipo estudiantil de ingeniería aeronáutica de la Universidad Iberoamericana Ciudad de México. Primera participación en SAE Aero Design.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Proyecto</h4>
+      <ul>
+        <li><a href="proyecto.html">Sobre el proyecto</a></li>
+        <li><a href="competencia.html">SAE Aero Design</a></li>
+        <li><a href="competencia.html#micro">Clase Micro</a></li>
+        <li><a href="cronograma.html">Cronograma</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Equipo</h4>
+      <ul>
+        <li><a href="areas.html">Áreas de trabajo</a></li>
+        <li><a href="unete.html">Únete</a></li>
+        <li><a href="avances.html">Avances</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Colabora</h4>
+      <ul>
+        <li><a href="patrocinios.html">Patrocinios</a></li>
+        <li><a href="contacto.html">Contacto</a></li>
+        <li><a href="#">Instagram</a></li>
+        <li><a href="#">LinkedIn</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 SAE Aero Design · Ibero Ciudad de México</p>
+    <p>Universidad Iberoamericana · <a href="#">DEII</a></p>
+  </div>
+</footer>
+
+<script>
+  const burger  = document.getElementById('burger');
+  const navMenu = document.getElementById('navMenu');
+  burger.addEventListener('click', function(e) {
+    e.stopPropagation();
+    const isOpen = navMenu.classList.toggle('open');
+    burger.classList.toggle('open', isOpen);
+    burger.setAttribute('aria-expanded', isOpen);
+  });
+  document.addEventListener('click', function(e) {
+    if (!navMenu.contains(e.target) && !burger.contains(e.target)) {
+      navMenu.classList.remove('open');
+      burger.classList.remove('open');
+      burger.setAttribute('aria-expanded', 'false');
+    }
+  });
+
+  const els = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('on'); io.unobserve(e.target); } });
+  }, { threshold: 0.08 });
+  els.forEach(el => io.observe(el));
+</script>
+
+</body>
+</html>

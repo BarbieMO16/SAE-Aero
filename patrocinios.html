@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Patrocinios · SAE Aero Design Ibero CDMX</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&family=Instrument+Serif:ital@0;1&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --rojo:      #EE0034;
+      --rojo-dark: #C40029;
+      --oro:       #D4AF37;
+      --plata:     #C0C0C0;
+      --bronce:    #CD7F32;
+      --blanco:    #FFFFFF;
+      --gris:      #82786F;
+      --negro:     #0A0A0A;
+      --negro-s:   #141414;
+      --negro-c:   #1A1A1A;
+      --nav-h:     68px;
+      --ease:      cubic-bezier(0.4,0,0.2,1);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Barlow', sans-serif; background: var(--negro); color: var(--blanco); overflow-x: hidden; }
+    a { text-decoration: none; color: inherit; }
+
+    .bg-grid {
+      position: fixed; inset: 0; pointer-events: none; z-index: 0;
+      background-image:
+        linear-gradient(rgba(238,0,52,.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(238,0,52,.03) 1px, transparent 1px);
+      background-size: 52px 52px;
+    }
+
+    /* ── NAV ── */
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 50; height: var(--nav-h); border-bottom: 1px solid rgba(255,255,255,.06); background: rgba(10,10,10,.92); backdrop-filter: blur(20px); }
+    .nav-inner { max-width: 1200px; margin: 0 auto; padding: 0 32px; height: 100%; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+    .logo-box { width: 34px; height: 34px; background: var(--rojo); display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: .06em; }
+    .logo-text .l1 { font-family: 'Bebas Neue', sans-serif; font-size: .9rem; letter-spacing: .1em; }
+    .logo-text .l2 { font-family: 'DM Mono', monospace; font-size: .55rem; letter-spacing: .14em; color: var(--gris); margin-top: 1px; }
+    .nav-links { display: flex; align-items: center; gap: 2px; list-style: none; flex: 1; justify-content: center; }
+    .nav-links a { font-family: 'DM Mono', monospace; font-size: .66rem; letter-spacing: .13em; text-transform: uppercase; color: rgba(255,255,255,.45); padding: 8px 14px; border-radius: 2px; transition: color .2s, background .2s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--blanco); background: rgba(255,255,255,.05); }
+    .nav-cta { font-family: 'DM Mono', monospace; font-size: .66rem; letter-spacing: .13em; text-transform: uppercase; color: var(--blanco); background: var(--rojo); padding: 9px 20px; flex-shrink: 0; transition: background .2s; }
+    .nav-cta:hover { background: var(--rojo-dark); }
+    .hamburger { display: none; flex-direction: column; justify-content: center; gap: 5.5px; cursor: pointer; padding: 8px; background: none; border: none; z-index: 60; }
+    .hamburger span { display: block; width: 22px; height: 1.5px; background: var(--blanco); transition: transform .35s var(--ease), opacity .25s; }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+    .nav-menu-mobile { display: none; position: fixed; top: var(--nav-h); right: 0; bottom: 0; width: 270px; background: rgba(10,10,10,.97); backdrop-filter: blur(24px); border-left: 1px solid rgba(255,255,255,.07); flex-direction: column; padding: 16px 0 32px; list-style: none; transform: translateX(100%); transition: transform .38s var(--ease); z-index: 55; }
+    .nav-menu-mobile.open { transform: translateX(0); }
+    .nav-menu-mobile li + li { border-top: 1px solid rgba(255,255,255,.04); }
+    .nav-menu-mobile a { font-family: 'DM Mono', monospace; font-size: .72rem; letter-spacing: .16em; text-transform: uppercase; color: rgba(255,255,255,.45); padding: 16px 28px; display: block; border-left: 2px solid transparent; transition: color .2s, border-color .2s, background .2s; }
+    .nav-menu-mobile a:hover { color: var(--blanco); border-left-color: var(--rojo); background: rgba(255,255,255,.03); }
+    .nav-menu-mobile .m-cta a { color: var(--rojo); }
+    .nav-menu-mobile .m-cta a:hover { color: var(--blanco); background: var(--rojo); border-left-color: var(--rojo); }
+
+    /* ── MAIN ── */
+    main { padding-top: var(--nav-h); position: relative; z-index: 1; }
+
+    /* ── SECCIÓN PATROCINIOS ── */
+    .pat-section {
+      min-height: calc(100vh - var(--nav-h));
+      max-width: 1200px; margin: 0 auto;
+      padding: 80px 32px 100px;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start;
+    }
+
+    /* Columna izquierda */
+    .section-label { font-family: 'DM Mono', monospace; font-size: .64rem; letter-spacing: .24em; text-transform: uppercase; color: var(--gris); margin-bottom: 20px; }
+    .page-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(3rem, 7vw, 5.5rem); letter-spacing: .03em; line-height: .92; margin-bottom: 32px; }
+    .page-title span { color: var(--rojo); }
+    .pat-desc { font-size: 1rem; line-height: 1.8; color: rgba(255,255,255,.52); margin-bottom: 40px; max-width: 440px; }
+
+    .btn-primary {
+      font-family: 'DM Mono', monospace; font-size: .75rem; letter-spacing: .12em; text-transform: uppercase;
+      color: var(--blanco); background: var(--rojo);
+      padding: 14px 28px; border: none; cursor: pointer;
+      display: inline-flex; align-items: center; gap: 8px;
+      transition: background .2s var(--ease), transform .2s var(--ease);
+    }
+    .btn-primary:hover { background: var(--rojo-dark); transform: translateY(-2px); }
+
+    /* Grid logos patrocinadores */
+    .logos-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 2px; margin-top: 52px;
+      background: rgba(255,255,255,.03);
+    }
+    .logo-slot {
+      background: var(--negro-c); aspect-ratio: 2/1;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'DM Mono', monospace; font-size: .58rem; letter-spacing: .18em;
+      text-transform: uppercase; color: rgba(255,255,255,.14);
+      border: 1px dashed rgba(255,255,255,.06);
+      transition: background .2s;
+    }
+    .logo-slot:hover { background: #202020; }
+
+    /* Columna derecha — tiers */
+    .tiers { display: flex; flex-direction: column; gap: 2px; padding-top: 80px; }
+    .tier {
+      background: var(--negro-c);
+      border: 1px solid rgba(255,255,255,.05);
+      padding: 28px 32px;
+      transition: border-color .3s, transform .3s;
+    }
+    .tier:hover { transform: translateX(-4px); }
+
+    .tier.oro   { border-color: rgba(212,175,55,.2);  background: rgba(212,175,55,.03); }
+    .tier.plata { border-color: rgba(192,192,192,.15); }
+    .tier.bronce{ border-color: rgba(205,127,50,.15);  }
+    .tier.oro:hover   { border-color: rgba(212,175,55,.5); }
+    .tier.plata:hover { border-color: rgba(192,192,192,.35); }
+    .tier.bronce:hover{ border-color: rgba(205,127,50,.35); }
+
+    .tier-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+    .tier-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; letter-spacing: .08em; }
+    .tier.oro    .tier-name { color: var(--oro); }
+    .tier.plata  .tier-name { color: var(--plata); }
+    .tier.bronce .tier-name { color: var(--bronce); }
+    .tier-level { font-family: 'DM Mono', monospace; font-size: .6rem; letter-spacing: .18em; text-transform: uppercase; color: var(--gris); }
+    .tier-perks { font-size: .88rem; line-height: 1.7; color: rgba(255,255,255,.45); }
+    .tier-perks span { color: rgba(255,255,255,.65); }
+
+    /* ── DIVISOR ── */
+    .divider {
+      border: none; border-top: 1px solid rgba(255,255,255,.05);
+      max-width: 1200px; margin: 0 auto;
+    }
+
+    /* ── SECCIÓN CONTACTO ── */
+    .contacto-section {
+      max-width: 1200px; margin: 0 auto;
+      padding: 80px 32px 100px;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start;
+    }
+
+    /* Izquierda contacto */
+    .contacto-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.8rem, 6vw, 5rem); letter-spacing: .03em; line-height: .92; margin-bottom: 28px; }
+    .contacto-title span { color: var(--rojo); }
+    .contacto-desc { font-size: .95rem; line-height: 1.8; color: rgba(255,255,255,.48); margin-bottom: 40px; }
+
+    .contact-items { display: flex; flex-direction: column; gap: 20px; }
+    .contact-item { display: flex; gap: 14px; align-items: flex-start; }
+    .contact-icon {
+      width: 34px; height: 34px; flex-shrink: 0;
+      border: 1px solid rgba(238,0,52,.35);
+      display: flex; align-items: center; justify-content: center;
+      font-size: .8rem; color: var(--rojo);
+    }
+    .c-label { font-family: 'DM Mono', monospace; font-size: .58rem; letter-spacing: .18em; text-transform: uppercase; color: var(--gris); margin-bottom: 3px; }
+    .c-val { font-size: .9rem; color: rgba(255,255,255,.65); }
+
+    /* Derecha — formulario apunta a Google Forms */
+    .form-wrap { display: flex; flex-direction: column; gap: 16px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-group { display: flex; flex-direction: column; gap: 8px; }
+    .form-label { font-family: 'DM Mono', monospace; font-size: .6rem; letter-spacing: .18em; text-transform: uppercase; color: var(--gris); }
+    .form-input, .form-select, .form-textarea {
+      background: var(--negro-c); border: 1px solid rgba(255,255,255,.08);
+      color: var(--blanco); font-family: 'Barlow', sans-serif; font-size: .9rem;
+      padding: 13px 16px; width: 100%; outline: none;
+      transition: border-color .2s;
+    }
+    .form-input::placeholder, .form-textarea::placeholder { color: rgba(255,255,255,.22); }
+    .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: rgba(238,0,52,.5); }
+    .form-textarea { min-height: 120px; resize: vertical; }
+    .form-select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2382786F' stroke-width='1.5' fill='none'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 16px center; cursor: pointer; }
+    .form-select option { background: var(--negro); }
+
+    /* Nota Google Forms */
+    .forms-note {
+      font-family: 'DM Mono', monospace; font-size: .6rem; letter-spacing: .14em;
+      color: rgba(255,255,255,.2); padding-top: 8px;
+      border-top: 1px solid rgba(255,255,255,.05);
+    }
+    .forms-note a { color: rgba(238,0,52,.6); transition: color .2s; }
+    .forms-note a:hover { color: var(--rojo); }
+
+    .btn-submit {
+      font-family: 'DM Mono', monospace; font-size: .75rem; letter-spacing: .14em; text-transform: uppercase;
+      color: var(--blanco); background: var(--rojo); border: none; cursor: pointer;
+      padding: 16px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px;
+      transition: background .2s var(--ease), transform .2s;
+    }
+    .btn-submit:hover { background: var(--rojo-dark); transform: translateY(-1px); }
+
+    /* ── FOOTER ── */
+    footer { background: var(--negro-s); border-top: 1px solid rgba(255,255,255,.05); padding: 60px 0 32px; position: relative; z-index: 2; }
+    .footer-inner { max-width: 1200px; margin: 0 auto; padding: 0 32px; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 48px; }
+    .footer-brand-logo { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+    .footer-brand p { font-size: .85rem; line-height: 1.7; color: rgba(255,255,255,.35); max-width: 260px; }
+    .footer-col h4 { font-family: 'DM Mono', monospace; font-size: .63rem; letter-spacing: .2em; text-transform: uppercase; color: var(--gris); margin-bottom: 20px; }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+    .footer-col ul li a { font-size: .85rem; color: rgba(255,255,255,.38); transition: color .2s; }
+    .footer-col ul li a:hover { color: var(--blanco); }
+    .footer-bottom { max-width: 1200px; margin: 0 auto; padding: 24px 32px 0; border-top: 1px solid rgba(255,255,255,.05); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+    .footer-bottom p { font-family: 'DM Mono', monospace; font-size: .6rem; letter-spacing: .14em; text-transform: uppercase; color: rgba(255,255,255,.2); }
+    .footer-bottom a { color: var(--rojo); }
+
+    /* Animaciones */
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity .7s var(--ease), transform .7s var(--ease); }
+    .reveal.on { opacity: 1; transform: translateY(0); }
+    .reveal.d1 { transition-delay: .1s; } .reveal.d2 { transition-delay: .2s; } .reveal.d3 { transition-delay: .3s; }
+
+    /* Mobile */
+    @media (max-width: 860px) {
+      .nav-links, .nav-cta { display: none; }
+      .hamburger { display: flex; }
+      .nav-menu-mobile { display: flex; }
+      .pat-section, .contacto-section { grid-template-columns: 1fr; gap: 48px; }
+      .tiers { padding-top: 0; }
+      .form-row { grid-template-columns: 1fr; }
+      .footer-inner { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 500px) {
+      .logos-grid { grid-template-columns: repeat(2, 1fr); }
+      .footer-inner { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="bg-grid"></div>
+
+<!-- ── NAV ── -->
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="logo">
+      <div class="logo-box">AD</div>
+      <div class="logo-text">
+        <div class="l1">SAE Aero Design</div>
+        <div class="l2">Ibero CDMX · 2027</div>
+      </div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="proyecto.html">Proyecto</a></li>
+      <li><a href="competencia.html">SAE</a></li>
+      <li><a href="areas.html">Áreas</a></li>
+      <li><a href="cronograma.html">Cronograma</a></li>
+      <li><a href="avances.html">Avances</a></li>
+      <li><a href="patrocinios.html" class="active">Patrocinios</a></li>
+    </ul>
+    <a href="unete.html" class="nav-cta">Únete al equipo →</a>
+    <button class="hamburger" id="burger" aria-label="Abrir menú" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+<ul class="nav-menu-mobile" id="navMenu">
+  <li><a href="proyecto.html">Proyecto</a></li>
+  <li><a href="competencia.html">SAE</a></li>
+  <li><a href="areas.html">Áreas</a></li>
+  <li><a href="cronograma.html">Cronograma</a></li>
+  <li><a href="avances.html">Avances</a></li>
+  <li><a href="patrocinios.html">Patrocinios</a></li>
+  <li class="m-cta"><a href="unete.html">Únete al equipo →</a></li>
+</ul>
+
+<main>
+
+  <!-- ══════════════════════════════
+       PATROCINIOS
+  ══════════════════════════════ -->
+  <section class="pat-section">
+
+    <!-- Izquierda -->
+    <div>
+      <p class="section-label reveal">// 07 · Patrocinios</p>
+      <h1 class="page-title reveal d1">Apoya al<br><span>equipo</span></h1>
+      <p class="pat-desc reveal d2">Tu apoyo hace posible que estudiantes mexicanos compitan al más alto nivel de ingeniería universitaria. Los patrocinadores obtienen visibilidad institucional, acceso a talento y vinculación directa con la comunidad universitaria.</p>
+      <!-- Scroll hacia la sección de contacto -->
+      <a href="#contacto" class="btn-primary reveal d2">Contáctanos →</a>
+
+      <!-- Logos patrocinadores -->
+      <div class="logos-grid reveal d3">
+        <div class="logo-slot">Logo patrocinador</div>
+        <div class="logo-slot">Logo patrocinador</div>
+        <div class="logo-slot">Logo patrocinador</div>
+        <div class="logo-slot">Logo patrocinador</div>
+        <div class="logo-slot">Logo patrocinador</div>
+        <div class="logo-slot">Logo patrocinador</div>
+      </div>
+    </div>
+
+    <!-- Derecha — tiers -->
+    <div class="tiers">
+      <div class="tier oro reveal">
+        <div class="tier-head">
+          <span class="tier-name">Oro</span>
+          <span class="tier-level">Nivel máximo</span>
+        </div>
+        <p class="tier-perks">
+          <span>Logo principal en aeronave y materiales</span> · Presencia en eventos · Acceso a reportes técnicos · Mención institucional · Contacto con egresados talentosos
+        </p>
+      </div>
+      <div class="tier plata reveal d1">
+        <div class="tier-head">
+          <span class="tier-name">Plata</span>
+          <span class="tier-level">Nivel medio</span>
+        </div>
+        <p class="tier-perks">
+          <span>Logo en materiales del equipo</span> · Mención en redes sociales · Acceso a presentaciones del proyecto
+        </p>
+      </div>
+      <div class="tier bronce reveal d2">
+        <div class="tier-head">
+          <span class="tier-name">Bronce</span>
+          <span class="tier-level">Nivel base</span>
+        </div>
+        <p class="tier-perks">
+          <span>Mención en materiales de difusión</span> y redes sociales · Reconocimiento institucional
+        </p>
+      </div>
+      <div class="tier reveal d3" style="border-color:rgba(255,255,255,.08);">
+        <div class="tier-head">
+          <span class="tier-name" style="color:rgba(255,255,255,.4); font-size:1.1rem;">Patrocinio en especie</span>
+          <span class="tier-level">Materiales / Servicios</span>
+        </div>
+        <p class="tier-perks">Donación de materiales, herramientas, software o servicios necesarios para el proyecto. Mención y reconocimiento según el valor del aporte.</p>
+      </div>
+    </div>
+
+  </section>
+
+  <hr class="divider" />
+
+  <!-- ══════════════════════════════
+       CONTACTO
+  ══════════════════════════════ -->
+  <section class="contacto-section" id="contacto">
+
+    <!-- Izquierda -->
+    <div>
+      <p class="section-label reveal">// 10 · Contacto</p>
+      <h2 class="contacto-title reveal d1">Hablemos<br>del <span>proyecto</span></h2>
+      <p class="contacto-desc reveal d2">¿Eres estudiante interesado en unirte? ¿Una empresa que quiere patrocinar? ¿Un profesor o directivo que quiere saber más? Escríbenos.</p>
+      <div class="contact-items reveal d3">
+        <div class="contact-item">
+          <div class="contact-icon">@</div>
+          <div>
+            <div class="c-label">Email</div>
+            <!-- EDITAR: reemplazar con correo real -->
+            <div class="c-val">correo@ibero.mx — editar</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">◎</div>
+          <div>
+            <div class="c-label">Instagram</div>
+            <!-- EDITAR: reemplazar con usuario real -->
+            <div class="c-val">@saeaerodesingibero — editar</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">⊞</div>
+          <div>
+            <div class="c-label">Universidad</div>
+            <div class="c-val">Universidad Iberoamericana Ciudad de México</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Derecha — formulario -->
+    <div class="reveal d1">
+      <!--
+        INSTRUCCIONES PARA CONECTAR GOOGLE FORMS:
+        1. Crea tu Google Form con los campos: Nombre, Correo, Motivo, Mensaje
+        2. En el form, ve a los 3 puntos → "Obtener vínculo rellenado previamente"
+        3. Copia los entry IDs de cada campo (entry.XXXXXXXXX)
+        4. Reemplaza action="" con la URL de tu form:
+           https://docs.google.com/forms/d/e/TU_FORM_ID/formResponse
+        5. Reemplaza los name="" de cada input con sus entry IDs
+        6. El target="_blank" abrirá la confirmación de Google en nueva pestaña
+      -->
+      <form
+        class="form-wrap"
+        id="contactForm"
+        action="https://docs.google.com/forms/d/e/TU_FORM_ID_AQUI/formResponse"
+        method="POST"
+        target="_blank"
+        onsubmit="handleSubmit(event)"
+      >
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Nombre completo</label>
+            <!-- EDITAR: name="entry.XXXXXXXXX" con el ID real del campo -->
+            <input type="text" class="form-input" name="entry.NOMBRE" placeholder="Tu nombre" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Correo electrónico</label>
+            <input type="email" class="form-input" name="entry.CORREO" placeholder="correo@ejemplo.com" required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Motivo de contacto</label>
+          <select class="form-select" name="entry.MOTIVO" required>
+            <option value="" disabled selected>Selecciona una opción</option>
+            <option value="patrocinio">Patrocinio / colaboración empresarial</option>
+            <option value="unirse">Quiero unirme al equipo</option>
+            <option value="docente">Soy docente / investigador</option>
+            <option value="prensa">Prensa / medios</option>
+            <option value="otro">Otro</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Mensaje</label>
+          <textarea class="form-textarea" name="entry.MENSAJE" placeholder="Cuéntanos sobre ti o tu organización..."></textarea>
+        </div>
+        <button type="submit" class="btn-submit">Enviar mensaje →</button>
+        <p class="forms-note">
+          Los datos se almacenan en Google Forms. <br>
+          <!-- EDITAR: reemplazar con link real al form -->
+          También puedes llenar el formulario <a href="https://forms.google.com" target="_blank">directamente aquí →</a>
+        </p>
+      </form>
+    </div>
+
+  </section>
+
+</main>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="footer-brand-logo">
+        <div class="logo-box">AD</div>
+        <div class="logo-text">
+          <div class="l1">SAE Aero Design</div>
+          <div class="l2">Ibero CDMX · 2027</div>
+        </div>
+      </div>
+      <p>Equipo estudiantil de ingeniería aeronáutica de la Universidad Iberoamericana Ciudad de México. Primera participación en SAE Aero Design.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Proyecto</h4>
+      <ul>
+        <li><a href="proyecto.html">Sobre el proyecto</a></li>
+        <li><a href="competencia.html">SAE Aero Design</a></li>
+        <li><a href="competencia.html#micro">Clase Micro</a></li>
+        <li><a href="cronograma.html">Cronograma</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Equipo</h4>
+      <ul>
+        <li><a href="areas.html">Áreas de trabajo</a></li>
+        <li><a href="unete.html">Únete</a></li>
+        <li><a href="avances.html">Avances</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Colabora</h4>
+      <ul>
+        <li><a href="patrocinios.html">Patrocinios</a></li>
+        <li><a href="patrocinios.html#contacto">Contacto</a></li>
+        <li><a href="#">Instagram</a></li>
+        <li><a href="#">LinkedIn</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 SAE Aero Design · Ibero CDMX</p>
+    <p>Universidad Iberoamericana · <a href="#">DEII</a></p>
+  </div>
+</footer>
+
+<script>
+  // Nav móvil
+  const burger  = document.getElementById('burger');
+  const navMenu = document.getElementById('navMenu');
+  burger.addEventListener('click', function(e) {
+    e.stopPropagation();
+    const isOpen = navMenu.classList.toggle('open');
+    burger.classList.toggle('open', isOpen);
+    burger.setAttribute('aria-expanded', isOpen);
+  });
+  document.addEventListener('click', function(e) {
+    if (!navMenu.contains(e.target) && !burger.contains(e.target)) {
+      navMenu.classList.remove('open');
+      burger.classList.remove('open');
+      burger.setAttribute('aria-expanded', 'false');
+    }
+  });
+
+  // Scroll reveal
+  const els = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('on'); io.unobserve(e.target); } });
+  }, { threshold: 0.08 });
+  els.forEach(el => io.observe(el));
+
+  // Submit — muestra confirmación visual antes de abrir Google Forms
+  function handleSubmit(e) {
+    const btn = document.querySelector('.btn-submit');
+    btn.textContent = 'Enviando...';
+    btn.style.background = '#444';
+    setTimeout(() => {
+      btn.textContent = 'Enviado ✓';
+      btn.style.background = '#2a7a2a';
+    }, 800);
+    // El form sigue su envío normal a Google Forms en nueva pestaña
+  }
+</script>
+
+</body>
+</html>

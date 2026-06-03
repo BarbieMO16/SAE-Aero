@@ -1,0 +1,1886 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SAE Aero Design · Ibero Ciudad de México</title>
+
+  <!-- ===== TIPOGRAFÍA — editable por diseñador ===== -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Instrument+Serif:ital@0;1&family=Barlow:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ===================================================================
+       VARIABLES — paleta institucional obligatoria
+       El diseñador final puede ajustar tonos aquí centralmente.
+    =================================================================== */
+    :root {
+      --rojo:        #EE0034;
+      --rojo-dark:   #C40029;
+      --blanco:      #FFFFFF;
+      --gris:        #82786F;
+      --gris-light:  #B0A9A4;
+      --gris-bg:     #F5F3F1;
+      --negro:       #0A0A0A;
+      --negro-soft:  #141414;
+      --negro-card:  #1A1A1A;
+
+      --font-display: 'Bebas Neue', sans-serif;
+      --font-serif:   'Instrument Serif', serif;
+      --font-mono:    'DM Mono', monospace;
+      --font-body:    'Barlow', sans-serif;
+
+      --nav-h: 70px;
+      --section-pad: 100px 0;
+      --radius: 2px;
+      --transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* ===== RESET ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-body);
+      background: var(--negro);
+      color: var(--blanco);
+      overflow-x: hidden;
+    }
+    a { text-decoration: none; color: inherit; }
+    img { display: block; max-width: 100%; }
+
+    /* ===== UTILIDADES ===== */
+    .container { width: min(1200px, 92vw); margin: 0 auto; }
+    .tag {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--rojo);
+      border: 1px solid var(--rojo);
+      padding: 4px 12px;
+      border-radius: var(--radius);
+    }
+    .section-label {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gris);
+      margin-bottom: 18px;
+    }
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.4rem, 5vw, 3.8rem);
+      letter-spacing: 0.04em;
+      line-height: 1;
+      color: var(--blanco);
+    }
+    .section-title span { color: var(--rojo); }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: var(--rojo);
+      color: var(--blanco);
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 14px 28px;
+      border: none; cursor: pointer;
+      transition: background var(--transition), transform var(--transition);
+    }
+    .btn-primary:hover { background: var(--rojo-dark); transform: translateY(-2px); }
+    .btn-outline {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: transparent;
+      color: var(--blanco);
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 13px 26px;
+      border: 1px solid rgba(255,255,255,0.3);
+      cursor: pointer;
+      transition: border-color var(--transition), color var(--transition);
+    }
+    .btn-outline:hover { border-color: var(--blanco); }
+
+    /* ===== ENGINEERING GRID OVERLAY ===== */
+    .grid-overlay {
+      position: absolute; inset: 0; pointer-events: none; z-index: 0;
+      background-image:
+        linear-gradient(rgba(238,0,52,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(238,0,52,0.04) 1px, transparent 1px);
+      background-size: 48px 48px;
+    }
+
+    /* ================================================================
+       NAV
+    ================================================================ */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      height: var(--nav-h);
+      background: rgba(10,10,10,0.92);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      transition: background var(--transition);
+    }
+    .nav-inner {
+      height: 100%; display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 12px;
+    }
+    .nav-logo-mark {
+      width: 36px; height: 36px;
+      background: var(--rojo);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      letter-spacing: 0.05em;
+    }
+    .nav-logo-text { line-height: 1.2; }
+    .nav-logo-text .line1 {
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      letter-spacing: 0.1em;
+    }
+    .nav-logo-text .line2 {
+      font-family: var(--font-mono);
+      font-size: 0.58rem;
+      color: var(--gris);
+      letter-spacing: 0.14em;
+    }
+    /* ===== editable: enlaces de nav ===== */
+    .nav-links {
+      display: flex; align-items: center; gap: 32px; list-style: none;
+    }
+    .nav-links a {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gris-light);
+      transition: color var(--transition);
+    }
+    .nav-links a:hover { color: var(--blanco); }
+    .nav-cta {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      background: var(--rojo);
+      color: var(--blanco);
+      padding: 9px 20px;
+      transition: background var(--transition);
+    }
+    .nav-cta:hover { background: var(--rojo-dark); }
+    .nav-hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+    .nav-hamburger span { width: 22px; height: 1.5px; background: var(--blanco); transition: var(--transition); }
+
+    /* ================================================================
+       HERO
+    ================================================================ */
+    #inicio {
+      position: relative;
+      min-height: 100vh;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 0 0 80px;
+      overflow: hidden;
+      background: var(--negro);
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 70% 40%, rgba(238,0,52,0.08) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 80% at 20% 60%, rgba(130,120,111,0.06) 0%, transparent 70%);
+    }
+    /* Blueprint lines decorativas */
+    .hero-blueprint {
+      position: absolute; inset: 0; pointer-events: none;
+      overflow: hidden;
+    }
+    .hero-blueprint svg { width: 100%; height: 100%; }
+
+    /* ===== PLACEHOLDER de imagen/render ===== */
+    /* DISEÑADOR: reemplaza este bloque con una foto del avión o render CAD */
+    .hero-plane-placeholder {
+      position: absolute;
+      right: -40px; bottom: 60px;
+      width: min(620px, 55vw); height: 340px;
+      display: flex; align-items: center; justify-content: center;
+      border: 1px dashed rgba(238,0,52,0.25);
+      background: linear-gradient(135deg, rgba(238,0,52,0.03), rgba(10,10,10,0));
+    }
+    .hero-plane-placeholder .ph-label {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      color: rgba(238,0,52,0.35);
+      text-transform: uppercase;
+      text-align: center;
+    }
+    /* SVG aeronave esquemática decorativa */
+    .plane-schematic {
+      position: absolute;
+      right: 5vw; top: 50%;
+      transform: translateY(-50%);
+      width: min(580px, 50vw);
+      opacity: 0.07;
+      pointer-events: none;
+    }
+
+    .hero-content { position: relative; z-index: 2; }
+    .hero-eyebrow {
+      display: flex; align-items: center; gap: 16px; margin-bottom: 24px;
+    }
+    .hero-eyebrow-line { width: 40px; height: 1px; background: var(--rojo); }
+    .hero-eyebrow-text {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--rojo);
+    }
+    .hero-h1 {
+      font-family: var(--font-display);
+      font-size: clamp(4rem, 10vw, 9rem);
+      line-height: 0.9;
+      letter-spacing: 0.03em;
+      color: var(--blanco);
+      margin-bottom: 8px;
+    }
+    .hero-h1 .red { color: var(--rojo); }
+    .hero-h1 .dim { color: rgba(255,255,255,0.18); }
+    .hero-sub {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+      color: var(--gris-light);
+      margin-bottom: 16px;
+    }
+    .hero-desc {
+      max-width: 480px;
+      font-size: 0.95rem;
+      line-height: 1.7;
+      color: rgba(255,255,255,0.55);
+      margin-bottom: 40px;
+    }
+    .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; }
+    .hero-stats {
+      position: absolute; right: 0; bottom: 80px; z-index: 2;
+      display: flex; flex-direction: column; gap: 28px;
+      border-left: 1px solid rgba(255,255,255,0.08);
+      padding-left: 32px;
+    }
+    .hero-stat-num {
+      font-family: var(--font-display);
+      font-size: 2.6rem;
+      line-height: 1;
+      color: var(--blanco);
+    }
+    .hero-stat-num span { color: var(--rojo); }
+    .hero-stat-label {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gris);
+    }
+    .hero-scroll {
+      position: absolute; left: 50%; bottom: 28px;
+      transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      font-family: var(--font-mono); font-size: 0.6rem;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: rgba(255,255,255,0.3); z-index: 2;
+    }
+    .hero-scroll-line {
+      width: 1px; height: 40px;
+      background: linear-gradient(to bottom, rgba(238,0,52,0.6), transparent);
+      animation: scrollLine 1.8s ease-in-out infinite;
+    }
+    @keyframes scrollLine {
+      0% { transform: scaleY(0); transform-origin: top; }
+      50% { transform: scaleY(1); transform-origin: top; }
+      100% { transform: scaleY(0); transform-origin: bottom; }
+    }
+
+    /* ================================================================
+       SOBRE EL PROYECTO
+    ================================================================ */
+    #sobre {
+      padding: var(--section-pad);
+      background: var(--negro-soft);
+      position: relative;
+      overflow: hidden;
+    }
+    .sobre-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px; align-items: center;
+    }
+    .sobre-visual {
+      position: relative;
+    }
+    /* DISEÑADOR: reemplazar por foto real del equipo o aeronave */
+    .img-placeholder {
+      width: 100%; aspect-ratio: 4/3;
+      background: var(--negro-card);
+      border: 1px dashed rgba(130,120,111,0.3);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 12px;
+      position: relative; overflow: hidden;
+    }
+    .img-placeholder::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(238,0,52,0.04), transparent);
+    }
+    .img-placeholder-icon { font-size: 2.5rem; opacity: 0.2; }
+    .img-placeholder-text {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gris);
+      text-align: center;
+      padding: 0 20px;
+    }
+    .img-accent {
+      position: absolute;
+      bottom: -16px; right: -16px;
+      width: 120px; height: 120px;
+      background: var(--rojo);
+      z-index: -1;
+    }
+    .sobre-text p {
+      font-size: 1rem;
+      line-height: 1.75;
+      color: rgba(255,255,255,0.65);
+      margin-bottom: 24px;
+    }
+    .sobre-highlights {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 16px; margin-top: 36px;
+    }
+    .highlight-item {
+      border-top: 1px solid rgba(238,0,52,0.3);
+      padding-top: 16px;
+    }
+    .highlight-num {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      color: var(--rojo);
+      line-height: 1;
+    }
+    .highlight-label {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gris);
+      margin-top: 4px;
+    }
+
+    /* ================================================================
+       QUÉ ES SAE AERO DESIGN
+    ================================================================ */
+    #sae {
+      padding: var(--section-pad);
+      background: var(--negro);
+      position: relative; overflow: hidden;
+    }
+    .sae-inner { display: grid; grid-template-columns: 2fr 3fr; gap: 80px; align-items: start; }
+    .sae-sticky { position: sticky; top: 100px; }
+    .sae-cards { display: flex; flex-direction: column; gap: 2px; }
+    .sae-card {
+      background: var(--negro-card);
+      border: 1px solid rgba(255,255,255,0.04);
+      padding: 32px 36px;
+      display: grid; grid-template-columns: auto 1fr;
+      gap: 20px; align-items: start;
+      transition: border-color var(--transition), transform var(--transition);
+    }
+    .sae-card:hover { border-color: rgba(238,0,52,0.3); transform: translateX(4px); }
+    .sae-card-num {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--rojo);
+      margin-top: 4px;
+    }
+    .sae-card h3 {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      letter-spacing: 0.06em;
+      margin-bottom: 10px;
+    }
+    .sae-card p {
+      font-size: 0.9rem;
+      line-height: 1.7;
+      color: rgba(255,255,255,0.5);
+    }
+
+    /* ================================================================
+       CLASE MICRO
+    ================================================================ */
+    #micro {
+      padding: var(--section-pad);
+      background: var(--rojo);
+      position: relative; overflow: hidden;
+    }
+    .micro-bg-text {
+      position: absolute; right: -20px; top: 50%;
+      transform: translateY(-50%);
+      font-family: var(--font-display);
+      font-size: clamp(10rem, 20vw, 18rem);
+      letter-spacing: 0.02em;
+      color: rgba(0,0,0,0.12);
+      white-space: nowrap;
+      pointer-events: none; user-select: none;
+      line-height: 1;
+    }
+    .micro-inner {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 80px; align-items: center;
+      position: relative; z-index: 1;
+    }
+    .micro-title {
+      font-family: var(--font-display);
+      font-size: clamp(3rem, 7vw, 6rem);
+      letter-spacing: 0.04em;
+      line-height: 0.95;
+      color: var(--blanco);
+      margin-bottom: 28px;
+    }
+    .micro-desc {
+      font-size: 1rem;
+      line-height: 1.75;
+      color: rgba(255,255,255,0.8);
+      margin-bottom: 36px;
+    }
+    .micro-specs {
+      display: flex; flex-direction: column; gap: 0;
+    }
+    .spec-row {
+      display: flex; justify-content: space-between; align-items: baseline;
+      padding: 16px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.15);
+    }
+    .spec-row:first-child { border-top: 1px solid rgba(255,255,255,0.15); }
+    .spec-key {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.6);
+    }
+    .spec-val {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      letter-spacing: 0.05em;
+      color: var(--blanco);
+    }
+    /* DISEÑADOR: reemplazar por render de la aeronave Clase Micro */
+    .micro-visual {
+      position: relative;
+    }
+    .micro-img-ph {
+      width: 100%; aspect-ratio: 16/10;
+      background: rgba(0,0,0,0.25);
+      border: 1px dashed rgba(255,255,255,0.2);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 12px;
+    }
+    .micro-img-ph .ph-label {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.4);
+      text-align: center;
+    }
+
+    /* ================================================================
+       ÁREAS DE TRABAJO
+    ================================================================ */
+    #areas {
+      padding: var(--section-pad);
+      background: var(--negro-soft);
+      position: relative;
+    }
+    .areas-header { text-align: center; margin-bottom: 60px; }
+    .areas-header .section-label { text-align: center; }
+    .areas-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.04);
+    }
+    .area-card {
+      background: var(--negro-card);
+      padding: 36px 30px;
+      position: relative; overflow: hidden;
+      transition: background var(--transition);
+    }
+    .area-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--rojo);
+      transform: scaleX(0);
+      transition: transform var(--transition);
+      transform-origin: left;
+    }
+    .area-card:hover { background: #1f1f1f; }
+    .area-card:hover::before { transform: scaleX(1); }
+    .area-icon {
+      width: 44px; height: 44px; margin-bottom: 20px;
+      display: flex; align-items: center; justify-content: center;
+      border: 1px solid rgba(238,0,52,0.3);
+      color: var(--rojo); font-size: 1.2rem;
+    }
+    .area-card h3 {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      letter-spacing: 0.07em;
+      margin-bottom: 12px;
+    }
+    .area-card p {
+      font-size: 0.88rem;
+      line-height: 1.65;
+      color: rgba(255,255,255,0.45);
+    }
+    .area-card .area-tag {
+      margin-top: 20px;
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--rojo);
+    }
+
+    /* ================================================================
+       CRONOGRAMA
+    ================================================================ */
+    #cronograma {
+      padding: var(--section-pad);
+      background: var(--negro);
+    }
+    .crono-header { margin-bottom: 60px; }
+    .crono-timeline { position: relative; }
+    .crono-line {
+      position: absolute; left: 0; top: 0; bottom: 0;
+      width: 1px; background: rgba(238,0,52,0.2);
+    }
+    .crono-phases {
+      display: flex; flex-direction: column; gap: 0;
+      padding-left: 40px;
+    }
+    .crono-phase {
+      display: grid; grid-template-columns: 220px 1fr;
+      gap: 40px; align-items: start;
+      padding: 32px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      position: relative;
+    }
+    .crono-phase::before {
+      content: '';
+      position: absolute; left: -44px; top: 36px;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--rojo);
+      box-shadow: 0 0 12px rgba(238,0,52,0.5);
+    }
+    .crono-phase.completed::before { background: var(--gris); box-shadow: none; }
+    .crono-phase.current::before {
+      width: 12px; height: 12px; left: -46px; top: 34px;
+      box-shadow: 0 0 20px rgba(238,0,52,0.8);
+      animation: pulseDot 2s ease-in-out infinite;
+    }
+    @keyframes pulseDot {
+      0%, 100% { box-shadow: 0 0 8px rgba(238,0,52,0.5); }
+      50% { box-shadow: 0 0 24px rgba(238,0,52,0.9); }
+    }
+    .phase-meta {}
+    .phase-period {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--rojo);
+      margin-bottom: 8px;
+    }
+    .phase-num {
+      font-family: var(--font-display);
+      font-size: 3rem;
+      color: rgba(255,255,255,0.06);
+      line-height: 1;
+    }
+    .phase-content h3 {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      letter-spacing: 0.07em;
+      margin-bottom: 12px;
+    }
+    .phase-content p {
+      font-size: 0.9rem;
+      line-height: 1.7;
+      color: rgba(255,255,255,0.45);
+      margin-bottom: 16px;
+    }
+    .phase-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+    .phase-tag {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.4);
+      border: 1px solid rgba(255,255,255,0.1);
+      padding: 4px 10px;
+    }
+    .phase-status {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 5px 12px;
+      margin-top: 16px;
+    }
+    .phase-status.active { color: var(--rojo); border: 1px solid rgba(238,0,52,0.4); }
+    .phase-status.done { color: var(--gris); border: 1px solid rgba(130,120,111,0.3); }
+    .phase-status.upcoming { color: rgba(255,255,255,0.3); border: 1px solid rgba(255,255,255,0.1); }
+    .phase-status-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+
+    /* ================================================================
+       ÚNETE AL EQUIPO
+    ================================================================ */
+    #unete {
+      padding: var(--section-pad);
+      background: var(--negro-soft);
+      position: relative; overflow: hidden;
+    }
+    .unete-bg {
+      position: absolute; right: 0; top: 0; bottom: 0; width: 45%;
+      background: linear-gradient(to left, rgba(238,0,52,0.06), transparent);
+      pointer-events: none;
+    }
+    .unete-inner {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 80px; align-items: center;
+      position: relative; z-index: 1;
+    }
+    .unete-text h2 { margin-bottom: 20px; }
+    .unete-text p {
+      font-size: 0.95rem; line-height: 1.75;
+      color: rgba(255,255,255,0.55);
+      margin-bottom: 16px;
+    }
+    .unete-text .note {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.14em;
+      color: var(--gris);
+      margin-top: 28px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255,255,255,0.07);
+    }
+    .unete-actions { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 32px; }
+    .roles-list { display: flex; flex-direction: column; gap: 2px; }
+    .role-item {
+      display: flex; justify-content: space-between; align-items: center;
+      background: var(--negro-card);
+      border: 1px solid rgba(255,255,255,0.04);
+      padding: 20px 24px;
+      transition: border-color var(--transition), background var(--transition);
+    }
+    .role-item:hover { border-color: rgba(238,0,52,0.3); background: #1c1c1c; }
+    .role-name {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      letter-spacing: 0.07em;
+    }
+    .role-area {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--rojo);
+    }
+    .role-arrow { color: rgba(255,255,255,0.2); font-size: 0.85rem; }
+
+    /* ================================================================
+       PATROCINIOS
+    ================================================================ */
+    #patrocinios {
+      padding: var(--section-pad);
+      background: var(--negro);
+    }
+    .pat-inner {
+      display: grid; grid-template-columns: 1fr 1.2fr;
+      gap: 80px; align-items: start;
+    }
+    .pat-text .section-title { margin-bottom: 24px; }
+    .pat-text p {
+      font-size: 0.95rem; line-height: 1.75;
+      color: rgba(255,255,255,0.55);
+      margin-bottom: 32px;
+    }
+    .pat-tiers { display: flex; flex-direction: column; gap: 2px; }
+    .tier-card {
+      padding: 24px 28px;
+      border: 1px solid rgba(255,255,255,0.06);
+      position: relative; overflow: hidden;
+      transition: border-color var(--transition);
+    }
+    .tier-card:hover { border-color: rgba(238,0,52,0.25); }
+    .tier-card.gold {
+      border-color: rgba(212,175,55,0.25);
+      background: rgba(212,175,55,0.03);
+    }
+    .tier-card.gold:hover { border-color: rgba(212,175,55,0.5); }
+    .tier-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .tier-name {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      letter-spacing: 0.08em;
+    }
+    .tier-card.gold .tier-name { color: #D4AF37; }
+    .tier-card.plata .tier-name { color: #C0C0C0; }
+    .tier-card.bronce .tier-name { color: #CD7F32; }
+    .tier-amount {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      color: var(--gris);
+    }
+    .tier-perks {
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.45);
+      line-height: 1.6;
+    }
+    /* DISEÑADOR: logos de patrocinadores reales aquí */
+    .sponsors-logos {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 1px; background: rgba(255,255,255,0.04);
+      margin-top: 40px;
+    }
+    .sponsor-slot {
+      background: var(--negro-card);
+      aspect-ratio: 2/1;
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.12);
+      transition: background var(--transition);
+    }
+    .sponsor-slot:hover { background: #1e1e1e; }
+
+    /* ================================================================
+       AVANCES
+    ================================================================ */
+    #avances {
+      padding: var(--section-pad);
+      background: var(--negro-soft);
+    }
+    .avances-header {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      margin-bottom: 52px;
+    }
+    .avances-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 2px;
+      background: rgba(255,255,255,0.03);
+    }
+    .avance-card {
+      background: var(--negro-card);
+      overflow: hidden;
+      transition: transform var(--transition);
+    }
+    .avance-card:hover { transform: translateY(-3px); }
+    /* DISEÑADOR: reemplazar con imagen real de avance/prototipo */
+    .avance-img {
+      width: 100%; aspect-ratio: 16/10;
+      background: #111;
+      display: flex; align-items: center; justify-content: center;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      position: relative; overflow: hidden;
+    }
+    .avance-img .overlay-grid {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(238,0,52,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(238,0,52,0.05) 1px, transparent 1px);
+      background-size: 32px 32px;
+    }
+    .avance-img-label {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.2em;
+      color: rgba(255,255,255,0.15);
+      text-align: center;
+      position: relative; z-index: 1;
+    }
+    .avance-body { padding: 24px 28px; }
+    .avance-date {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--rojo);
+      margin-bottom: 10px;
+    }
+    .avance-body h3 {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      letter-spacing: 0.06em;
+      margin-bottom: 10px;
+    }
+    .avance-body p {
+      font-size: 0.85rem;
+      line-height: 1.65;
+      color: rgba(255,255,255,0.4);
+    }
+
+    /* ================================================================
+       GALERÍA
+    ================================================================ */
+    #galeria {
+      padding: var(--section-pad);
+      background: var(--negro);
+    }
+    .galeria-label { margin-bottom: 12px; }
+    .galeria-title { margin-bottom: 48px; }
+    /* DISEÑADOR: reemplazar celdas con fotos reales del equipo/avión */
+    .galeria-masonry {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: repeat(2, 200px);
+      gap: 2px;
+    }
+    .gal-item {
+      background: var(--negro-card);
+      display: flex; align-items: center; justify-content: center;
+      border: 1px dashed rgba(130,120,111,0.15);
+      position: relative; overflow: hidden;
+      cursor: pointer;
+      transition: filter var(--transition);
+    }
+    .gal-item:hover { filter: brightness(1.2); }
+    .gal-item::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(238,0,52,0.04), transparent);
+    }
+    .gal-item:nth-child(1) { grid-column: span 2; grid-row: span 2; }
+    .gal-item:nth-child(3) { grid-column: span 2; }
+    .gal-label {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.12);
+      position: relative; z-index: 1;
+    }
+
+    /* ================================================================
+       CONTACTO
+    ================================================================ */
+    #contacto {
+      padding: var(--section-pad);
+      background: var(--negro-soft);
+      position: relative; overflow: hidden;
+    }
+    .contacto-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 80px;
+    }
+    .contacto-text .section-title { margin-bottom: 28px; }
+    .contacto-text p {
+      font-size: 0.95rem; line-height: 1.75;
+      color: rgba(255,255,255,0.5);
+      margin-bottom: 40px;
+    }
+    .contact-items { display: flex; flex-direction: column; gap: 24px; }
+    .contact-item { display: flex; gap: 16px; align-items: flex-start; }
+    .contact-icon {
+      width: 36px; height: 36px; flex-shrink: 0;
+      border: 1px solid rgba(238,0,52,0.3);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.85rem; color: var(--rojo);
+    }
+    .contact-label {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gris);
+      margin-bottom: 4px;
+    }
+    .contact-val {
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.7);
+    }
+    /* DISEÑADOR: formulario real de contacto aquí */
+    .contact-form { display: flex; flex-direction: column; gap: 16px; }
+    .form-group { display: flex; flex-direction: column; gap: 8px; }
+    .form-label {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gris);
+    }
+    .form-input, .form-select, .form-textarea {
+      background: var(--negro-card);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: var(--blanco);
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      padding: 14px 18px;
+      width: 100%;
+      transition: border-color var(--transition);
+      outline: none;
+    }
+    .form-textarea { min-height: 110px; resize: vertical; }
+    .form-input:focus,
+    .form-select:focus,
+    .form-textarea:focus { border-color: rgba(238,0,52,0.5); }
+    .form-select option { background: var(--negro); }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+    /* ================================================================
+       FOOTER
+    ================================================================ */
+    footer {
+      background: var(--negro);
+      border-top: 1px solid rgba(255,255,255,0.05);
+      padding: 60px 0 32px;
+    }
+    .footer-inner {
+      display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 48px; margin-bottom: 48px;
+    }
+    .footer-brand .nav-logo { margin-bottom: 20px; }
+    .footer-brand p {
+      font-size: 0.85rem;
+      line-height: 1.7;
+      color: rgba(255,255,255,0.35);
+      max-width: 260px;
+    }
+    .footer-col h4 {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gris);
+      margin-bottom: 20px;
+    }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+    .footer-col ul li a {
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.4);
+      transition: color var(--transition);
+    }
+    .footer-col ul li a:hover { color: var(--blanco); }
+    .footer-bottom {
+      padding-top: 24px;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .footer-bottom p {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.2);
+    }
+    .footer-bottom a { color: var(--rojo); }
+
+    /* ================================================================
+       MOBILE
+    ================================================================ */
+    @media (max-width: 900px) {
+      .nav-links, .nav-cta { display: none; }
+      .nav-hamburger { display: flex; }
+      .sobre-grid, .sae-inner, .micro-inner, .unete-inner,
+      .pat-inner, .contacto-grid { grid-template-columns: 1fr; gap: 48px; }
+      .crono-phase { grid-template-columns: 1fr; gap: 16px; }
+      .footer-inner { grid-template-columns: 1fr 1fr; }
+      .galeria-masonry { grid-template-columns: repeat(2,1fr); grid-template-rows: auto; }
+      .gal-item:nth-child(1) { grid-column: span 2; grid-row: span 1; }
+      .gal-item:nth-child(3) { grid-column: span 2; }
+      .hero-stats { display: none; }
+      .hero-plane-placeholder { display: none; }
+      .sponsors-logos { grid-template-columns: repeat(2,1fr); }
+      .form-row { grid-template-columns: 1fr; }
+    }
+
+    /* ================================================================
+       SCROLL ANIMATIONS
+    ================================================================ */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+  </style>
+</head>
+
+<body>
+
+  <!-- ================================================================
+       NAV — editable: enlaces, logo
+  ================================================================ -->
+  <nav>
+    <div class="container nav-inner">
+      <a href="#inicio" class="nav-logo">
+        <div class="nav-logo-mark">AD</div>
+        <div class="nav-logo-text">
+          <div class="line1">SAE Aero Design</div>
+          <div class="line2">Ibero Ciudad de México · 2027</div>
+        </div>
+      </a>
+      <ul class="nav-links">
+        <li><a href="#sobre">Proyecto</a></li>
+        <li><a href="#sae">SAE</a></li>
+        <li><a href="#areas">Áreas</a></li>
+        <li><a href="#cronograma">Cronograma</a></li>
+        <li><a href="#avances">Avances</a></li>
+        <li><a href="#patrocinios">Patrocinios</a></li>
+      </ul>
+      <a href="#unete" class="nav-cta">Únete al equipo →</a>
+      <div class="nav-hamburger" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ================================================================
+       HERO
+  ================================================================ -->
+  <section id="inicio">
+    <div class="hero-bg"></div>
+    <div class="grid-overlay"></div>
+
+    <!-- SVG decorativo aeronave esquemática -->
+    <svg class="plane-schematic" viewBox="0 0 600 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Fuselaje -->
+      <path d="M50 150 Q200 130 580 150 Q200 170 50 150Z" stroke="white" stroke-width="1.5"/>
+      <!-- Ala principal -->
+      <path d="M180 150 L100 80 L300 140 L100 220 L180 150Z" stroke="white" stroke-width="1"/>
+      <!-- Ala trasera -->
+      <path d="M500 150 L460 110 L560 145 L460 190 L500 150Z" stroke="white" stroke-width="1"/>
+      <!-- Cola vertical -->
+      <path d="M540 150 L520 90 L560 150" stroke="white" stroke-width="1"/>
+      <!-- Líneas técnicas -->
+      <line x1="50" y1="150" x2="580" y2="150" stroke="white" stroke-width="0.5" stroke-dasharray="8 6"/>
+      <circle cx="580" cy="150" r="4" stroke="white" stroke-width="1"/>
+      <circle cx="50" cy="150" r="4" stroke="white" stroke-width="1"/>
+      <!-- Cotas -->
+      <line x1="50" y1="230" x2="580" y2="230" stroke="white" stroke-width="0.5"/>
+      <line x1="50" y1="225" x2="50" y2="235" stroke="white" stroke-width="0.5"/>
+      <line x1="580" y1="225" x2="580" y2="235" stroke="white" stroke-width="0.5"/>
+    </svg>
+
+    <!-- Placeholder imagen render -->
+    <div class="hero-plane-placeholder">
+      <div class="ph-label">[ Render / CAD Aeronave Clase Micro ]<br>reemplazar con imagen real</div>
+    </div>
+
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-eyebrow">
+          <div class="hero-eyebrow-line"></div>
+          <span class="hero-eyebrow-text">Universidad Iberoamericana · Primera participación · 2027</span>
+        </div>
+        <h1 class="hero-h1">
+          <span class="dim">SAE</span><br>
+          AERO<br>
+          <span class="red">DESIGN</span>
+        </h1>
+        <p class="hero-sub">Ibero Ciudad de México · Clase Micro</p>
+        <p class="hero-desc">
+          Diseñamos, construimos y competimos. Un equipo estudiantil de ingeniería 
+          que lleva a la Iberoamericana por primera vez a la competencia 
+          SAE Aero Design.
+        </p>
+        <div class="hero-actions">
+          <a href="#unete" class="btn-primary">Únete al equipo →</a>
+          <a href="#sobre" class="btn-outline">Conoce el proyecto</a>
+        </div>
+      </div>
+
+      <div class="hero-stats">
+        <div>
+          <div class="hero-stat-num">12<span>–14</span></div>
+          <div class="hero-stat-label">Mar 2027<br>Fecha de competencia</div>
+        </div>
+        <div>
+          <div class="hero-stat-num">1<span>ª</span></div>
+          <div class="hero-stat-label">Participación<br>Ibero CDMX</div>
+        </div>
+        <div>
+          <div class="hero-stat-num">9</div>
+          <div class="hero-stat-label">Áreas<br>de trabajo</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-scroll">
+      <div class="hero-scroll-line"></div>
+      scroll
+    </div>
+  </section>
+
+  <!-- ================================================================
+       SOBRE EL PROYECTO
+  ================================================================ -->
+  <section id="sobre">
+    <div class="container">
+      <div class="sobre-grid">
+        <!-- DISEÑADOR: reemplazar placeholder con foto del equipo o aeronave -->
+        <div class="sobre-visual reveal">
+          <div class="img-placeholder">
+            <div class="img-placeholder-icon">✈</div>
+            <div class="img-placeholder-text">Foto del equipo / aeronave<br>reemplazar con imagen real</div>
+          </div>
+          <div class="img-accent"></div>
+        </div>
+        <div class="sobre-text reveal reveal-delay-1">
+          <p class="section-label">// 01 · Sobre el proyecto</p>
+          <h2 class="section-title">Un proyecto de <span>ingeniería</span> en serio.</h2>
+          <br>
+          <p>
+            SAE Aero Design Ibero Ciudad de México es el primer equipo estudiantil formal 
+            de la Universidad Iberoamericana CDMX que compite en la competencia SAE Aero Design, 
+            uno de los retos de ingeniería más exigentes a nivel universitario en América.
+          </p>
+          <p>
+            El proyecto reúne a estudiantes de ingeniería, física y disciplinas afines para 
+            diseñar, manufacturar y volar una aeronave radiocontrolada optimizada para 
+            transportar la mayor carga posible respetando estrictas restricciones de diseño.
+          </p>
+          <div class="sobre-highlights">
+            <div class="highlight-item">
+              <div class="highlight-num">2027</div>
+              <div class="highlight-label">Año de competencia</div>
+            </div>
+            <div class="highlight-item">
+              <div class="highlight-num">Micro</div>
+              <div class="highlight-label">Clase de competencia</div>
+            </div>
+            <div class="highlight-item">
+              <div class="highlight-num">9</div>
+              <div class="highlight-label">Áreas técnicas</div>
+            </div>
+            <div class="highlight-item">
+              <div class="highlight-num">1ª</div>
+              <div class="highlight-label">Participación IBERO</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================
+       QUÉ ES SAE AERO DESIGN
+  ================================================================ -->
+  <section id="sae">
+    <div class="container">
+      <div class="sae-inner">
+        <div class="sae-sticky reveal">
+          <p class="section-label">// 02 · La competencia</p>
+          <h2 class="section-title">Qué es<br><span>SAE</span><br>Aero Design.</h2>
+          <br><br>
+          <p style="color:rgba(255,255,255,0.45); font-size:0.9rem; line-height:1.7;">
+            SAE Aero Design es una competencia internacional organizada por SAE International 
+            que reta a estudiantes universitarios a diseñar y volar aeronaves radiocontroladas 
+            bajo reglas estrictas de ingeniería.
+          </p>
+        </div>
+        <div class="sae-cards reveal reveal-delay-1">
+          <div class="sae-card">
+            <span class="sae-card-num">01</span>
+            <div>
+              <h3>Diseño y análisis</h3>
+              <p>Los equipos diseñan su aeronave desde cero, documentando cada decisión de ingeniería en un reporte técnico evaluado por jueces expertos de la industria aeronáutica.</p>
+            </div>
+          </div>
+          <div class="sae-card">
+            <span class="sae-card-num">02</span>
+            <div>
+              <h3>Manufactura</h3>
+              <p>La aeronave se construye completamente por el equipo estudiantil, poniendo en práctica técnicas de manufactura, materiales compuestos y fabricación de precisión.</p>
+            </div>
+          </div>
+          <div class="sae-card">
+            <span class="sae-card-num">03</span>
+            <div>
+              <h3>Vuelo y competencia</h3>
+              <p>Durante el evento, los equipos deben demostrar en vuelo el desempeño proyectado, siendo evaluados por capacidad de carga útil, estabilidad y cumplimiento de reglas.</p>
+            </div>
+          </div>
+          <div class="sae-card">
+            <span class="sae-card-num">04</span>
+            <div>
+              <h3>Reporte técnico</h3>
+              <p>Además del vuelo, se entrega un reporte de ingeniería completo que demuestra el proceso de diseño, análisis, iteración y decisiones del equipo.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================
+       CLASE MICRO
+  ================================================================ -->
+  <section id="micro">
+    <div class="micro-bg-text">MICRO</div>
+    <div class="container">
+      <div class="micro-inner">
+        <div class="reveal">
+          <p class="section-label" style="color:rgba(255,255,255,0.6);">// 03 · Categoría</p>
+          <h2 class="micro-title">Clase<br>Micro.</h2>
+          <p class="micro-desc">
+            La Clase Micro es la categoría más compacta y técnicamente desafiante de SAE Aero Design. 
+            Requiere un diseño altamente optimizado donde cada gramo y cada milímetro importan.
+          </p>
+          <div class="micro-specs">
+            <!-- DISEÑADOR / EQUIPO TÉCNICO: verificar valores con el reglamento actualizado -->
+            <div class="spec-row">
+              <span class="spec-key">Peso máximo en vacío</span>
+              <span class="spec-val">≤ estimado — verificar reglamento</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-key">Envergadura máxima</span>
+              <span class="spec-val">≤ estimado — verificar reglamento</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-key">Propulsión</span>
+              <span class="spec-val">Eléctrica RC</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-key">Métrica principal</span>
+              <span class="spec-val">Carga útil / Peso vacío</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-key">Categoría</span>
+              <span class="spec-val">Clase Micro · SAE 2027</span>
+            </div>
+          </div>
+        </div>
+        <!-- DISEÑADOR: reemplazar con render del avión Clase Micro -->
+        <div class="micro-visual reveal reveal-delay-1">
+          <div class="micro-img-ph">
+            <div class="ph-label">[ Render / Vista 3D aeronave Clase Micro ]<br>reemplazar con imagen real</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================
+       ÁREAS DE TRABAJO
+  ================================================================ -->
+  <section id="areas">
+    <div class="container">
+      <div class="areas-header reveal">
+        <p class="section-label">// 04 · Estructura del equipo</p>
+        <h2 class="section-title">Áreas de <span>trabajo</span></h2>
+      </div>
+      <div class="areas-grid">
+        <!-- DISEÑADOR: iconos pueden ser SVGs o de una librería como Lucide, Phosphor, etc. -->
+        <div class="area-card reveal">
+          <div class="area-icon">◈</div>
+          <h3>Aerodinámica</h3>
+          <p>Diseño de perfiles alares, análisis CFD, optimización de sustentación y arrastre para maximizar la razón de carga.</p>
+          <div class="area-tag">// aero</div>
+        </div>
+        <div class="area-card reveal reveal-delay-1">
+          <div class="area-icon">⊞</div>
+          <h3>Estructuras</h3>
+          <p>Análisis de cargas, selección de materiales, diseño de fuselaje, alas y empenaje. Materiales compuestos y balanceo de peso.</p>
+          <div class="area-tag">// str</div>
+        </div>
+        <div class="area-card reveal reveal-delay-2">
+          <div class="area-icon">⚡</div>
+          <h3>Propulsión</h3>
+          <p>Selección de motor, hélice y batería. Análisis de empuje, consumo energético y autonomía de vuelo.</p>
+          <div class="area-tag">// prop</div>
+        </div>
+        <div class="area-card reveal">
+          <div class="area-icon">⊕</div>
+          <h3>Estabilidad y Control</h3>
+          <p>Diseño de superficies de control, análisis de estabilidad estática y dinámica, calibración de radio y servos.</p>
+          <div class="area-tag">// s&c</div>
+        </div>
+        <div class="area-card reveal reveal-delay-1">
+          <div class="area-icon">⌂</div>
+          <h3>Manufactura</h3>
+          <p>Construcción física de la aeronave: corte, pegado, laminado, ensamble y control de calidad dimensional.</p>
+          <div class="area-tag">// mfg</div>
+        </div>
+        <div class="area-card reveal reveal-delay-2">
+          <div class="area-icon">⊛</div>
+          <h3>Electrónica y RC</h3>
+          <p>Integración electrónica, programación de controladores, pruebas de radio control y sistemas de telemetría.</p>
+          <div class="area-tag">// elec</div>
+        </div>
+        <div class="area-card reveal">
+          <div class="area-icon">≡</div>
+          <h3>Documentación Técnica</h3>
+          <p>Redacción del reporte de diseño, presentaciones de ingeniería, memorias de cálculo y entregables SAE.</p>
+          <div class="area-tag">// doc</div>
+        </div>
+        <div class="area-card reveal reveal-delay-1">
+          <div class="area-icon">◎</div>
+          <h3>Finanzas y Patrocinios</h3>
+          <p>Gestión del presupuesto del proyecto, búsqueda de patrocinadores y administración de recursos.</p>
+          <div class="area-tag">// fin</div>
+        </div>
+        <div class="area-card reveal reveal-delay-2">
+          <div class="area-icon">⊚</div>
+          <h3>Comunicación Institucional</h3>
+          <p>Difusión, redes sociales, relaciones con la universidad, reclutamiento y representación del equipo.</p>
+          <div class="area-tag">// comm</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================
+       CRONOGRAMA
+  ================================================================ -->
+  <section id="cronograma">
+    <div class="container">
+      <div class="crono-header reveal">
+        <p class="section-label">// 05 · Planeación</p>
+        <h2 class="section-title">Cronograma<br><span>general</span></h2>
+      </div>
+      <div class="crono-timeline">
+        <div class="crono-line"></div>
+        <div class="crono-phases">
+
+          <!-- FASE 1 -->
+          <div class="crono-phase current reveal">
+            <div class="phase-meta">
+              <div class="phase-period">May — Jul 2026</div>
+              <div class="phase-num">01</div>
+            </div>
+            <div class="phase-content">
+              <h3>Organización y Reclutamiento</h3>
+              <p>Conformación del equipo, definición de roles, establecimiento de procesos internos y primera ronda de reclutamiento en la Iberoamericana.</p>
+              <div class="phase-tags">
+                <span class="phase-tag">Gestión</span>
+                <span class="phase-tag">Reclutamiento</span>
+                <span class="phase-tag">Estructura organizacional</span>
+              </div>
+              <div class="phase-status active"><span class="phase-status-dot"></span> En curso</div>
+            </div>
+          </div>
+
+          <!-- FASE 2 -->
+          <div class="crono-phase reveal">
+            <div class="phase-meta">
+              <div class="phase-period">Jul — Oct 2026</div>
+              <div class="phase-num">02</div>
+            </div>
+            <div class="phase-content">
+              <h3>Diseño Conceptual</h3>
+              <p>Análisis de reglamento, selección de configuración aerodinámica, primeros bocetos, estimaciones de peso y análisis de trade-offs.</p>
+              <div class="phase-tags">
+                <span class="phase-tag">Aerodinámica</span>
+                <span class="phase-tag">Estructuras</span>
+                <span class="phase-tag">Propulsión</span>
+                <span class="phase-tag">Reglamento</span>
+              </div>
+              <div class="phase-status upcoming"><span class="phase-status-dot"></span> Próximamente</div>
+            </div>
+          </div>
+
+          <!-- FASE 3 -->
+          <div class="crono-phase reveal">
+            <div class="phase-meta">
+              <div class="phase-period">Oct — Dic 2026</div>
+              <div class="phase-num">03</div>
+            </div>
+            <div class="phase-content">
+              <h3>Diseño Detallado y Manufactura</h3>
+              <p>Diseño CAD completo, análisis FEM, construcción del prototipo de vuelo, pruebas de componentes y manufactura final.</p>
+              <div class="phase-tags">
+                <span class="phase-tag">CAD/CAE</span>
+                <span class="phase-tag">Manufactura</span>
+                <span class="phase-tag">Pruebas</span>
+              </div>
+              <div class="phase-status upcoming"><span class="phase-status-dot"></span> Próximamente</div>
+            </div>
+          </div>
+
+          <!-- FASE 4 -->
+          <div class="crono-phase reveal">
+            <div class="phase-meta">
+              <div class="phase-period">Ene — Feb 2027</div>
+              <div class="phase-num">04</div>
+            </div>
+            <div class="phase-content">
+              <h3>Pruebas de Vuelo y Ajustes</h3>
+              <p>Pruebas de vuelo reales, ajuste de parámetros RC, optimización de carga, documentación de resultados y preparación del reporte técnico SAE.</p>
+              <div class="phase-tags">
+                <span class="phase-tag">Vuelo RC</span>
+                <span class="phase-tag">Reporte técnico</span>
+                <span class="phase-tag">Iteración</span>
+              </div>
+              <div class="phase-status upcoming"><span class="phase-status-dot"></span> Próximamente</div>
+            </div>
+          </div>
+
+          <!-- FASE 5 -->
+          <div class="crono-phase reveal">
+            <div class="phase-meta">
+              <div class="phase-period">12–14 Mar 2027</div>
+              <div class="phase-num">05</div>
+            </div>
+            <div class="phase-content">
+              <h3>Competencia SAE Aero Design 2027</h3>
+              <p>Participación en la competencia oficial SAE Aero Design. Primera representación de la Universidad Iberoamericana Ciudad de México.</p>
+              <div class="phase-tags">
+                <span class="phase-tag">Competencia</span>
+                <span class="phase-tag">Representación institucional</span>
+              </div>
+              <div class="phase-status upcoming"><span class="phase-status-dot"></span> Meta final</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================
+       ÚNETE AL EQUIPO
+  ================================================================ -->
+  <section id="unete">
+    <div class="unete-bg"></div>
+    <div class="container">
+      <div class="unete-inner">
+        <div class="unete-text reveal">
+          <p class="section-label">// 06 · Convocatoria</p>
+          <h2 class="section-title">Únete al<br><span>equipo</span></h2>
+          <br>
+          <p>
+            Buscamos estudiantes comprometidos, curiosos y con ganas de aprender haciendo. 
+            No necesitas ser experto — necesitas querer construir algo real.
+          </p>
+          <p>
+            Aplica a cualquiera de las áreas del equipo. Todas las disciplinas de ingeniería 
+            y física son bienvenidas.
+          </p>
+          <p class="note">
+            ⟶ Convocatoria abierta · Universidad Iberoamericana Ciudad de México<br>
+            Período: [editar fecha de convocatoria]
+          </p>
+          <div class="unete-actions">
+            <!-- DISEÑADOR: enlazar al formulario real de registro -->
+            <a href="#contacto" class="btn-primary">Aplicar ahora →</a>
+            <a href="#areas" class="btn-outline">Ver áreas</a>
+          </div>
+        </div>
+        <div class="roles-list reveal reveal-delay-1">
+          <!-- DISEÑADOR: lista de roles disponibles — editable -->
+          <div class="role-item">
+            <div>
+              <div class="role-name">Ingeniero Aerodinámico</div>
+              <div class="role-area">// Aerodinámica</div>
+            </div>
+            <span class="role-arrow">→</span>
+          </div>
+          <div class="role-item">
+            <div>
+              <div class="role-name">Diseñador Estructural</div>
+              <div class="role-area">// Estructuras</div>
+            </div>
+            <span class="role-arrow">→</span>
+          </div>
+          <div class="role-item">
+            <div>
+              <div class="role-name">Especialista en Propulsión</div>
+              <div class="role-area">// Propulsión</div>
+            </div>
+            <span class="role-arrow">→</span>
+          </div>
+          <div class="role-item">
+            <div>
+              <div class="role-name">Técnico en Manufactura</div>
+              <div class="role-area">// Manufactura</div>
+            </div>
+            <span class="role-arrow">→</span>
+          </div>
+          <div class="role-item">
+            <div>
+              <div class="role-name">Electrónica y RC</div>
+              <div class="role-area">// Electrónica</div>
+            </div>
+            <span class="role-arrow">→</span>
+          </div>
+          <div class="role-item">
+            <div>
+              <div class="role-name">Finanzas y Patrocinios</div>
+              <div class="role-area">// Gestión</div>
+            </div>
+            <span class="role-arrow">→</span>
+          </div>
+          <div class="role-item">
+            <div>
+              <div class="role-name">Comunicación y Difusión</div>
+              <div class="role-area">// Comm</div>
+            </div>
+            <span class="role-arrow">→</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================
+       PATROCINIOS
+  ================================================================ -->
+  <section id="patrocinios">
+    <div class="container">
+      <div class="pat-inner">
+        <div class="pat-text reveal">
+          <p class="section-label">// 07 · Patrocinios</p>
+          <h2 class="section-title">Apoya al<br><span>equipo</span></h2>
+          <br>
+          <p>
+            Tu apoyo hace posible que estudiantes mexicanos compitan al más alto nivel de 
+            ingeniería universitaria. Los patrocinadores obtienen visibilidad institucional, 
+            acceso a talento y vinculación directa con la comunidad universitaria.
+          </p>
+          <a href="#contacto" class="btn-primary">Contáctanos →</a>
+
+          <!-- DISEÑADOR: logos de patrocinadores actuales — reemplazar slots -->
+          <div class="sponsors-logos">
+            <div class="sponsor-slot">Logo patrocinador</div>
+            <div class="sponsor-slot">Logo patrocinador</div>
+            <div class="sponsor-slot">Logo patrocinador</div>
+            <div class="sponsor-slot">Logo patrocinador</div>
+            <div class="sponsor-slot">Logo patrocinador</div>
+            <div class="sponsor-slot">Logo patrocinador</div>
+          </div>
+        </div>
+
+        <div class="pat-tiers reveal reveal-delay-1">
+          <div class="tier-card gold">
+            <div class="tier-header">
+              <span class="tier-name">Oro</span>
+              <span class="tier-amount">Nivel máximo</span>
+            </div>
+            <p class="tier-perks">Logo principal en aeronave y materiales · Presencia en eventos · Acceso a reportes técnicos · Mención institucional · Contacto con egresados talentosos</p>
+          </div>
+          <div class="tier-card plata">
+            <div class="tier-header">
+              <span class="tier-name">Plata</span>
+              <span class="tier-amount">Nivel medio</span>
+            </div>
+            <p class="tier-perks">Logo en materiales del equipo · Mención en redes sociales · Acceso a presentaciones del proyecto</p>
+          </div>
+          <div class="tier-card bronce">
+            <div class="tier-header">
+              <span class="tier-name">Bronce</span>
+              <span class="tier-amount">Nivel base</span>
+            </div>
+            <p class="tier-perks">Mención en materiales de difusión y redes sociales · Reconocimiento institucional</p>
+          </div>
+          <!-- DISEÑADOR: agregar tier de patrocinio en especie si aplica -->
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================
+       AVANCES DEL PROYECTO
+  ================================================================ -->
+  <section id="avances">
+    <div class="container">
+      <div class="avances-header reveal">
+        <div>
+          <p class="section-label">// 08 · Bitácora</p>
+          <h2 class="section-title">Avances del<br><span>proyecto</span></h2>
+        </div>
+        <!-- DISEÑADOR: enlace a blog/feed completo -->
+        <a href="#" class="btn-outline">Ver todos →</a>
+      </div>
+      <div class="avances-grid">
+        <!-- DISEÑADOR: reemplazar con entradas reales de avances -->
+        <div class="avance-card reveal">
+          <div class="avance-img">
+            <div class="overlay-grid"></div>
+            <div class="avance-img-label">Imagen del avance<br>reemplazar con foto/render real</div>
+          </div>
+          <div class="avance-body">
+            <div class="avance-date">Mayo 2026</div>
+            <h3>Lanzamiento oficial del proyecto</h3>
+            <p>El proyecto SAE Aero Design Ibero CDMX arranca oficialmente. Se establecen roles, estructura organizacional y calendario general de actividades.</p>
+          </div>
+        </div>
+        <div class="avance-card reveal reveal-delay-1">
+          <div class="avance-img">
+            <div class="overlay-grid"></div>
+            <div class="avance-img-label">Imagen del avance<br>reemplazar con foto/render real</div>
+          </div>
+          <div class="avance-body">
+            <div class="avance-date">Mayo 2026</div>
+            <h3>Primera reunión con asesor técnico</h3>
+            <p>Sesión de alineación con el Profesor Justino González López. Se revisan objetivos técnicos, restricciones de diseño y plan de trabajo inicial.</p>
+          </div>
+        </div>
+        <div class="avance-card reveal reveal-delay-2">
+          <div class="avance-img">
+            <div class="overlay-grid"></div>
+            <div class="avance-img-label">Imagen del avance<br>reemplazar con foto/render real</div>
+          </div>
+          <div class="avance-body">
+            <div class="avance-date">Próximamente</div>
+            <h3>Convocatoria de reclutamiento</h3>
+            <p>Inicio de la campaña de reclutamiento en la comunidad universitaria de la Iberoamericana Ciudad de México.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================
+       GALERÍA
+  ================================================================ -->
+  <section id="galeria">
+    <div class="container">
+      <p class="section-label galeria-label reveal">// 09 · Galería</p>
+      <h2 class="section-title galeria-title reveal"><span>Imágenes</span> del proyecto</h2>
+      <!-- DISEÑADOR: reemplazar cada celda con foto real del equipo, avión o pruebas -->
+      <div class="galeria-masonry reveal">
+        <div class="gal-item">
+          <span class="gal-label">Foto principal / render aeronave</span>
+        </div>
+        <div class="gal-item">
+          <span class="gal-label">Equipo trabajando</span>
+        </div>
+        <div class="gal-item">
+          <span class="gal-label">Detalle manufactura / materiales</span>
+        </div>
+        <div class="gal-item">
+          <span class="gal-label">Vista CAD</span>
+        </div>
+        <div class="gal-item">
+          <span class="gal-label">Prueba de vuelo</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================
+       CONTACTO
+  ================================================================ -->
+  <section id="contacto">
+    <div class="container">
+      <div class="contacto-grid">
+        <div class="contacto-text reveal">
+          <p class="section-label">// 10 · Contacto</p>
+          <h2 class="section-title">Hablemos<br>del <span>proyecto</span></h2>
+          <br>
+          <p>
+            ¿Eres estudiante interesado en unirte? ¿Una empresa que quiere patrocinar? 
+            ¿Un profesor o directivo que quiere saber más? Escríbenos.
+          </p>
+          <div class="contact-items">
+            <!-- DISEÑADOR: reemplazar con datos reales de contacto -->
+            <div class="contact-item">
+              <div class="contact-icon">@</div>
+              <div>
+                <div class="contact-label">Email</div>
+                <div class="contact-val">correo@ibero.mx — editar</div>
+              </div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-icon">◎</div>
+              <div>
+                <div class="contact-label">Instagram</div>
+                <div class="contact-val">@saeaerodesingibero — editar</div>
+              </div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-icon">⊞</div>
+              <div>
+                <div class="contact-label">Universidad</div>
+                <div class="contact-val">Universidad Iberoamericana Ciudad de México</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DISEÑADOR: conectar formulario a backend / Formspree / Google Forms -->
+        <div class="reveal reveal-delay-1">
+          <form class="contact-form" onsubmit="return false;">
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Nombre completo</label>
+                <input type="text" class="form-input" placeholder="Tu nombre" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Correo electrónico</label>
+                <input type="email" class="form-input" placeholder="correo@ejemplo.com" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Motivo de contacto</label>
+              <select class="form-select">
+                <option value="">Selecciona una opción</option>
+                <option>Quiero unirme al equipo</option>
+                <option>Patrocinio / colaboración</option>
+                <option>Soy docente / investigador</option>
+                <option>Prensa / medios</option>
+                <option>Otro</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Mensaje</label>
+              <textarea class="form-textarea" placeholder="Cuéntanos sobre ti o tu organización…"></textarea>
+            </div>
+            <button type="submit" class="btn-primary" style="width:100%; justify-content:center;">
+              Enviar mensaje →
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================
+       FOOTER
+  ================================================================ -->
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <div class="nav-logo">
+            <div class="nav-logo-mark">AD</div>
+            <div class="nav-logo-text">
+              <div class="line1">SAE Aero Design</div>
+              <div class="line2">Ibero Ciudad de México · 2027</div>
+            </div>
+          </div>
+          <p>
+            Equipo estudiantil de ingeniería aeronáutica de la Universidad 
+            Iberoamericana Ciudad de México. Primera participación en SAE Aero Design.
+          </p>
+        </div>
+        <div class="footer-col">
+          <h4>Proyecto</h4>
+          <ul>
+            <li><a href="#sobre">Sobre el proyecto</a></li>
+            <li><a href="#sae">SAE Aero Design</a></li>
+            <li><a href="#micro">Clase Micro</a></li>
+            <li><a href="#cronograma">Cronograma</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Equipo</h4>
+          <ul>
+            <li><a href="#areas">Áreas de trabajo</a></li>
+            <li><a href="#unete">Únete</a></li>
+            <li><a href="#avances">Avances</a></li>
+            <li><a href="#galeria">Galería</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Colabora</h4>
+          <ul>
+            <li><a href="#patrocinios">Patrocinios</a></li>
+            <li><a href="#contacto">Contacto</a></li>
+            <!-- DISEÑADOR: agregar redes sociales reales -->
+            <li><a href="#">Instagram</a></li>
+            <li><a href="#">LinkedIn</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 SAE Aero Design · Ibero Ciudad de México · Maqueta conceptual — no publicar sin revisión</p>
+        <p>Universidad Iberoamericana · <a href="#">DEII</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ================================================================
+       JAVASCRIPT
+  ================================================================ -->
+  <script>
+    // === NAV scroll effect ===
+    const nav = document.querySelector('nav');
+    window.addEventListener('scroll', () => {
+      nav.style.background = window.scrollY > 60
+        ? 'rgba(10,10,10,0.97)'
+        : 'rgba(10,10,10,0.92)';
+    });
+
+    // === Mobile menu toggle ===
+    function toggleMenu() {
+      const links = document.querySelector('.nav-links');
+      const cta   = document.querySelector('.nav-cta');
+      if (links.style.display === 'flex') {
+        links.style.display = 'none';
+        if (cta) cta.style.display = 'none';
+      } else {
+        links.style.display = 'flex';
+        links.style.flexDirection = 'column';
+        links.style.position = 'absolute';
+        links.style.top = 'var(--nav-h)';
+        links.style.left = '0'; links.style.right = '0';
+        links.style.background = 'rgba(10,10,10,0.98)';
+        links.style.padding = '20px 24px';
+        links.style.gap = '20px';
+        links.style.borderTop = '1px solid rgba(255,255,255,0.06)';
+      }
+    }
+
+    // === Scroll reveal ===
+    const revealEls = document.querySelectorAll('.reveal');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    revealEls.forEach(el => io.observe(el));
+
+    // === Smooth active nav link ===
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks  = document.querySelectorAll('.nav-links a');
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(sec => {
+        if (window.scrollY >= sec.offsetTop - 100) current = sec.id;
+      });
+      navLinks.forEach(a => {
+        a.style.color = a.getAttribute('href') === '#' + current
+          ? 'var(--blanco)'
+          : '';
+      });
+    });
+  </script>
+
+</body>
+</html>

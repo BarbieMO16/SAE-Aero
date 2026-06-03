@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Competencia · SAE Aero Design Ibero CDMX</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&family=Instrument+Serif:ital@0;1&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --rojo:      #EE0034;
+      --rojo-dark: #C40029;
+      --blanco:    #FFFFFF;
+      --gris:      #82786F;
+      --negro:     #0A0A0A;
+      --negro-s:   #141414;
+      --negro-c:   #1A1A1A;
+      --nav-h:     68px;
+      --ease:      cubic-bezier(0.4,0,0.2,1);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Barlow', sans-serif; background: var(--negro); color: var(--blanco); overflow-x: hidden; }
+    a { text-decoration: none; color: inherit; }
+
+    /* FONDO */
+    .bg-grid {
+      position: fixed; inset: 0; pointer-events: none; z-index: 0;
+      background-image:
+        linear-gradient(rgba(238,0,52,.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(238,0,52,.03) 1px, transparent 1px);
+      background-size: 52px 52px;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+      height: var(--nav-h);
+      border-bottom: 1px solid rgba(255,255,255,.06);
+      background: rgba(10,10,10,.92);
+      backdrop-filter: blur(20px);
+    }
+    .nav-inner {
+      max-width: 1200px; margin: 0 auto; padding: 0 32px;
+      height: 100%; display: flex; align-items: center; justify-content: space-between; gap: 24px;
+    }
+    .logo { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+    .logo-box {
+      width: 34px; height: 34px; background: var(--rojo);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: .06em;
+    }
+    .logo-text .l1 { font-family: 'Bebas Neue', sans-serif; font-size: .9rem; letter-spacing: .1em; }
+    .logo-text .l2 { font-family: 'DM Mono', monospace; font-size: .55rem; letter-spacing: .14em; color: var(--gris); margin-top: 1px; }
+    .nav-links { display: flex; align-items: center; gap: 2px; list-style: none; flex: 1; justify-content: center; }
+    .nav-links a {
+      font-family: 'DM Mono', monospace; font-size: .66rem; letter-spacing: .13em; text-transform: uppercase;
+      color: rgba(255,255,255,.45); padding: 8px 14px; border-radius: 2px;
+      transition: color .2s, background .2s;
+    }
+    .nav-links a:hover { color: var(--blanco); background: rgba(255,255,255,.05); }
+    .nav-links a.active { color: var(--blanco); background: rgba(255,255,255,.05); }
+    .nav-cta {
+      font-family: 'DM Mono', monospace; font-size: .66rem; letter-spacing: .13em; text-transform: uppercase;
+      color: var(--blanco); background: var(--rojo); padding: 9px 20px; flex-shrink: 0;
+      transition: background .2s;
+    }
+    .nav-cta:hover { background: var(--rojo-dark); }
+    .hamburger {
+      display: none; flex-direction: column; justify-content: center; gap: 5.5px;
+      cursor: pointer; padding: 8px; background: none; border: none; z-index: 60;
+    }
+    .hamburger span { display: block; width: 22px; height: 1.5px; background: var(--blanco); transition: transform .35s var(--ease), opacity .25s; }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+    .nav-menu-mobile {
+      display: none; position: fixed; top: var(--nav-h); right: 0; bottom: 0;
+      width: 270px; background: rgba(10,10,10,.97); backdrop-filter: blur(24px);
+      border-left: 1px solid rgba(255,255,255,.07);
+      flex-direction: column; padding: 16px 0 32px; list-style: none;
+      transform: translateX(100%); transition: transform .38s var(--ease); z-index: 55;
+    }
+    .nav-menu-mobile.open { transform: translateX(0); }
+    .nav-menu-mobile li + li { border-top: 1px solid rgba(255,255,255,.04); }
+    .nav-menu-mobile a {
+      font-family: 'DM Mono', monospace; font-size: .72rem; letter-spacing: .16em; text-transform: uppercase;
+      color: rgba(255,255,255,.45); padding: 16px 28px; display: block;
+      border-left: 2px solid transparent; transition: color .2s, border-color .2s, background .2s;
+    }
+    .nav-menu-mobile a:hover { color: var(--blanco); border-left-color: var(--rojo); background: rgba(255,255,255,.03); }
+    .nav-menu-mobile .m-cta a { color: var(--rojo); }
+    .nav-menu-mobile .m-cta a:hover { color: var(--blanco); background: var(--rojo); border-left-color: var(--rojo); }
+
+    /* ── CONTENIDO ── */
+    main { padding-top: var(--nav-h); position: relative; z-index: 1; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 32px; }
+
+    /* ── HERO INTERIOR ── */
+    .page-hero {
+      padding: 90px 32px 80px;
+      max-width: 1200px; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: end;
+      border-bottom: 1px solid rgba(255,255,255,.05);
+    }
+    .section-label {
+      font-family: 'DM Mono', monospace; font-size: .64rem;
+      letter-spacing: .24em; text-transform: uppercase; color: var(--gris); margin-bottom: 20px;
+    }
+    .page-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3.5rem, 8vw, 7rem);
+      letter-spacing: .03em; line-height: .9;
+    }
+    .page-title span { color: var(--rojo); }
+    .page-hero-right { padding-bottom: 8px; }
+    .page-intro {
+      font-family: 'Instrument Serif', serif; font-style: italic;
+      font-size: clamp(1.1rem, 2vw, 1.4rem);
+      color: rgba(255,255,255,.55); line-height: 1.6; margin-bottom: 28px;
+    }
+    .page-desc { font-size: .95rem; line-height: 1.8; color: rgba(255,255,255,.45); }
+
+    /* ── QUÉ ES SAE ── */
+    .que-es { padding: 100px 32px; }
+    .que-es-inner {
+      max-width: 1200px; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr 2fr; gap: 80px; align-items: start;
+    }
+    .sticky-label { position: sticky; top: 100px; }
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.2rem, 4.5vw, 3.4rem);
+      letter-spacing: .04em; line-height: 1; margin-top: 12px;
+    }
+    .section-title span { color: var(--rojo); }
+
+    /* Tarjetas pilares */
+    .pilares { display: flex; flex-direction: column; gap: 2px; }
+    .pilar {
+      background: var(--negro-c);
+      border: 1px solid rgba(255,255,255,.04);
+      padding: 32px 36px;
+      display: grid; grid-template-columns: 36px 1fr; gap: 20px; align-items: start;
+      transition: border-color .3s var(--ease), transform .3s var(--ease);
+    }
+    .pilar:hover { border-color: rgba(238,0,52,.3); transform: translateX(4px); }
+    .pilar-num { font-family: 'DM Mono', monospace; font-size: .68rem; color: var(--rojo); margin-top: 4px; }
+    .pilar h3 { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: .06em; margin-bottom: 10px; }
+    .pilar p { font-size: .9rem; line-height: 1.7; color: rgba(255,255,255,.48); }
+
+    /* ── CLASES ── */
+    .clases {
+      background: var(--negro-s);
+      border-top: 1px solid rgba(255,255,255,.04);
+      border-bottom: 1px solid rgba(255,255,255,.04);
+      padding: 100px 32px;
+    }
+    .clases-header { max-width: 1200px; margin: 0 auto 56px; }
+    .clases-grid {
+      max-width: 1200px; margin: 0 auto;
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px;
+    }
+    .clase-card {
+      background: var(--negro-c);
+      border: 1px solid rgba(255,255,255,.04);
+      padding: 40px 32px;
+      position: relative; overflow: hidden;
+      transition: border-color .3s, background .3s;
+    }
+    .clase-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: var(--rojo); transform: scaleX(0); transition: transform .3s var(--ease); transform-origin: left;
+    }
+    .clase-card:hover { border-color: rgba(238,0,52,.2); background: #1d1d1d; }
+    .clase-card:hover::before { transform: scaleX(1); }
+    .clase-card.featured {
+      border-color: rgba(238,0,52,.35);
+      background: rgba(238,0,52,.04);
+    }
+    .clase-card.featured::before { transform: scaleX(1); }
+    .clase-badge {
+      font-family: 'DM Mono', monospace; font-size: .6rem; letter-spacing: .18em; text-transform: uppercase;
+      color: var(--rojo); border: 1px solid rgba(238,0,52,.4);
+      padding: 4px 10px; display: inline-block; margin-bottom: 20px;
+    }
+    .clase-badge.nuestro { background: var(--rojo); color: var(--blanco); border-color: var(--rojo); }
+    .clase-name {
+      font-family: 'Bebas Neue', sans-serif; font-size: 2.2rem; letter-spacing: .05em;
+      line-height: 1; margin-bottom: 16px;
+    }
+    .clase-desc { font-size: .88rem; line-height: 1.7; color: rgba(255,255,255,.45); margin-bottom: 24px; }
+    .clase-specs { display: flex; flex-direction: column; gap: 0; }
+    .cs-row {
+      display: flex; justify-content: space-between;
+      padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,.06); font-size: .82rem;
+    }
+    .cs-row:last-child { border-bottom: none; }
+    .cs-k { color: rgba(255,255,255,.35); font-family: 'DM Mono', monospace; font-size: .62rem; letter-spacing: .12em; text-transform: uppercase; }
+    .cs-v { color: rgba(255,255,255,.7); }
+
+    /* ── SCORING ── */
+    .scoring { padding: 100px 32px; }
+    .scoring-inner { max-width: 1200px; margin: 0 auto; }
+    .scoring-header { margin-bottom: 56px; }
+    .scoring-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
+    .score-block {
+      background: var(--negro-c);
+      border: 1px solid rgba(255,255,255,.04);
+      padding: 36px 28px;
+      transition: border-color .3s;
+    }
+    .score-block:hover { border-color: rgba(238,0,52,.25); }
+    .score-pct {
+      font-family: 'Bebas Neue', sans-serif; font-size: 3.5rem; line-height: 1;
+      color: var(--rojo); margin-bottom: 8px;
+    }
+    .score-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; letter-spacing: .07em; margin-bottom: 12px; }
+    .score-desc { font-size: .85rem; line-height: 1.65; color: rgba(255,255,255,.42); }
+
+    /* ── TIMELINE EVENTO ── */
+    .evento {
+      background: var(--negro-s);
+      border-top: 1px solid rgba(255,255,255,.04);
+      padding: 100px 32px;
+    }
+    .evento-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+    .evento-info h2 { margin-bottom: 24px; }
+    .evento-info p { font-size: .95rem; line-height: 1.8; color: rgba(255,255,255,.48); margin-bottom: 36px; }
+    .evento-dato {
+      display: flex; gap: 16px; align-items: flex-start; margin-bottom: 24px;
+    }
+    .dato-icon {
+      width: 36px; height: 36px; flex-shrink: 0;
+      border: 1px solid rgba(238,0,52,.35);
+      display: flex; align-items: center; justify-content: center;
+      font-size: .85rem; color: var(--rojo);
+    }
+    .dato-label { font-family: 'DM Mono', monospace; font-size: .6rem; letter-spacing: .18em; text-transform: uppercase; color: var(--gris); margin-bottom: 4px; }
+    .dato-val { font-size: .95rem; color: rgba(255,255,255,.75); }
+
+    /* Timeline días */
+    .dias { display: flex; flex-direction: column; gap: 2px; }
+    .dia-item {
+      background: var(--negro-c); border: 1px solid rgba(255,255,255,.04);
+      padding: 24px 28px; display: grid; grid-template-columns: 80px 1fr; gap: 20px; align-items: start;
+      transition: border-color .3s;
+    }
+    .dia-item:hover { border-color: rgba(238,0,52,.25); }
+    .dia-num { font-family: 'Bebas Neue', sans-serif; font-size: 2.4rem; color: var(--rojo); line-height: 1; }
+    .dia-mes { font-family: 'DM Mono', monospace; font-size: .6rem; letter-spacing: .16em; text-transform: uppercase; color: var(--gris); }
+    .dia-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; letter-spacing: .06em; margin-bottom: 6px; }
+    .dia-desc { font-size: .85rem; line-height: 1.6; color: rgba(255,255,255,.42); }
+
+    /* ── CTA FINAL ── */
+    .cta-final {
+      background: var(--rojo); padding: 80px 32px; text-align: center; position: relative; overflow: hidden;
+    }
+    .cta-final-bg {
+      position: absolute; inset: 0;
+      font-family: 'Bebas Neue', sans-serif; font-size: 18rem;
+      color: rgba(0,0,0,.1); display: flex; align-items: center; justify-content: center;
+      pointer-events: none; user-select: none; line-height: 1;
+    }
+    .cta-final-inner { position: relative; z-index: 1; max-width: 600px; margin: 0 auto; }
+    .cta-final h2 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.5rem, 6vw, 4.5rem); letter-spacing: .04em; margin-bottom: 16px; }
+    .cta-final p { font-size: 1rem; color: rgba(255,255,255,.8); margin-bottom: 36px; line-height: 1.7; }
+    .btn-white {
+      font-family: 'DM Mono', monospace; font-size: .75rem; letter-spacing: .12em; text-transform: uppercase;
+      color: var(--rojo); background: var(--blanco);
+      padding: 14px 32px; display: inline-flex; align-items: center; gap: 8px;
+      transition: transform .2s var(--ease), box-shadow .2s;
+    }
+    .btn-white:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,.3); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--negro-s); border-top: 1px solid rgba(255,255,255,.05);
+      padding: 60px 0 32px; position: relative; z-index: 2;
+    }
+    .footer-inner {
+      max-width: 1200px; margin: 0 auto; padding: 0 32px;
+      display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 48px;
+    }
+    .footer-brand-logo { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+    .footer-brand p { font-size: .85rem; line-height: 1.7; color: rgba(255,255,255,.35); max-width: 260px; }
+    .footer-col h4 { font-family: 'DM Mono', monospace; font-size: .63rem; letter-spacing: .2em; text-transform: uppercase; color: var(--gris); margin-bottom: 20px; }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+    .footer-col ul li a { font-size: .85rem; color: rgba(255,255,255,.38); transition: color .2s; }
+    .footer-col ul li a:hover { color: var(--blanco); }
+    .footer-bottom {
+      max-width: 1200px; margin: 0 auto; padding: 24px 32px 0;
+      border-top: 1px solid rgba(255,255,255,.05);
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;
+    }
+    .footer-bottom p { font-family: 'DM Mono', monospace; font-size: .6rem; letter-spacing: .14em; text-transform: uppercase; color: rgba(255,255,255,.2); }
+    .footer-bottom a { color: var(--rojo); }
+
+    /* Animaciones */
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity .7s var(--ease), transform .7s var(--ease); }
+    .reveal.on { opacity: 1; transform: translateY(0); }
+    .reveal.d1 { transition-delay: .1s; } .reveal.d2 { transition-delay: .2s; } .reveal.d3 { transition-delay: .3s; }
+
+    /* Mobile */
+    @media (max-width: 860px) {
+      .nav-links, .nav-cta { display: none; }
+      .hamburger { display: flex; }
+      .nav-menu-mobile { display: flex; }
+      .page-hero, .que-es-inner, .evento-inner { grid-template-columns: 1fr; gap: 40px; }
+      .clases-grid, .scoring-grid { grid-template-columns: 1fr; }
+      .sticky-label { position: static; }
+      .footer-inner { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 500px) {
+      .footer-inner { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="bg-grid"></div>
+
+<!-- ── NAV ── -->
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="logo">
+      <div class="logo-box">AD</div>
+      <div class="logo-text">
+        <div class="l1">SAE Aero Design</div>
+        <div class="l2">Ibero CDMX · 2027</div>
+      </div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="proyecto.html">Proyecto</a></li>
+      <li><a href="competencia.html" class="active">SAE</a></li>
+      <li><a href="areas.html">Áreas</a></li>
+      <li><a href="cronograma.html">Cronograma</a></li>
+      <li><a href="avances.html">Avances</a></li>
+      <li><a href="patrocinios.html">Patrocinios</a></li>
+    </ul>
+    <a href="unete.html" class="nav-cta">Únete al equipo →</a>
+    <button class="hamburger" id="burger" aria-label="Abrir menú" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+<ul class="nav-menu-mobile" id="navMenu">
+  <li><a href="proyecto.html">Proyecto</a></li>
+  <li><a href="competencia.html">Competencia</a></li>
+  <li><a href="areas.html">Áreas</a></li>
+  <li><a href="cronograma.html">Cronograma</a></li>
+  <li><a href="avances.html">Avances</a></li>
+  <li><a href="patrocinios.html">Patrocinios</a></li>
+  <li class="m-cta"><a href="unete.html">Únete al equipo →</a></li>
+</ul>
+
+<main>
+
+  <!-- ── HERO INTERIOR ── -->
+  <div class="page-hero reveal">
+    <div>
+      <p class="section-label">// La competencia</p>
+      <h1 class="page-title">SAE<br>Aero<br><span>Design.</span></h1>
+    </div>
+    <div class="page-hero-right">
+      <p class="page-intro">Una competencia internacional que reta a universitarios a diseñar, construir y volar aeronaves desde cero.</p>
+      <p class="page-desc">SAE International organiza anualmente este reto donde equipos de todo el mundo demuestran sus capacidades de ingeniería aeronáutica bajo reglas estrictas, evaluados tanto en vuelo como en documentación técnica.</p>
+    </div>
+  </div>
+
+  <!-- ── QUÉ ES SAE ── -->
+  <section class="que-es">
+    <div class="que-es-inner">
+      <div class="sticky-label reveal">
+        <p class="section-label">// 01 · Formato</p>
+        <h2 class="section-title">Cómo<br>funciona<br>la <span>competencia.</span></h2>
+      </div>
+      <div class="pilares">
+        <div class="pilar reveal">
+          <span class="pilar-num">01</span>
+          <div>
+            <h3>Reporte de diseño</h3>
+            <p>Antes del evento los equipos entregan un reporte técnico completo. Jueces de la industria aeronáutica lo evalúan sobre el proceso de diseño, análisis y decisiones de ingeniería.</p>
+          </div>
+        </div>
+        <div class="pilar reveal d1">
+          <span class="pilar-num">02</span>
+          <div>
+            <h3>Presentación oral</h3>
+            <p>Durante el evento, el equipo defiende su diseño frente a un panel de ingenieros profesionales. Se evalúa la comprensión técnica y la capacidad de argumentación.</p>
+          </div>
+        </div>
+        <div class="pilar reveal d2">
+          <span class="pilar-num">03</span>
+          <div>
+            <h3>Vuelo de demostración</h3>
+            <p>La aeronave debe despegar, completar el circuito y aterrizar cargando el mayor peso posible. El puntaje de vuelo depende de la razón carga útil / peso en vacío.</p>
+          </div>
+        </div>
+        <div class="pilar reveal d3">
+          <span class="pilar-num">04</span>
+          <div>
+            <h3>Inspección técnica</h3>
+            <p>Antes de volar, la aeronave pasa por una inspección rigurosa de seguridad y cumplimiento del reglamento. Sin aprobarla, no hay vuelo.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CLASES ── -->
+  <section class="clases">
+    <div class="clases-header reveal">
+      <p class="section-label">// 02 · Categorías</p>
+      <h2 class="section-title">Las tres<br><span>clases.</span></h2>
+    </div>
+    <div class="clases-grid">
+
+      <div class="clase-card reveal">
+        <span class="clase-badge">Regular</span>
+        <div class="clase-name">Clase Regular</div>
+        <p class="clase-desc">La categoría estándar. Sin restricciones severas de tamaño, enfocada en maximizar la razón de carga útil con un diseño convencional.</p>
+        <div class="clase-specs">
+          <div class="cs-row"><span class="cs-k">Tamaño</span><span class="cs-v">Sin límite estricto</span></div>
+          <div class="cs-row"><span class="cs-k">Enfoque</span><span class="cs-v">Carga máxima</span></div>
+          <div class="cs-row"><span class="cs-k">Dificultad</span><span class="cs-v">Media</span></div>
+        </div>
+      </div>
+
+      <div class="clase-card featured reveal d1">
+        <span class="clase-badge nuestro">Nuestra categoría</span>
+        <div class="clase-name">Clase Micro</div>
+        <p class="clase-desc">La categoría más compacta y técnicamente desafiante. Restricciones estrictas de tamaño que exigen diseño altamente optimizado.</p>
+        <div class="clase-specs">
+          <div class="cs-row"><span class="cs-k">Propulsión</span><span class="cs-v">Eléctrica RC</span></div>
+          <div class="cs-row"><span class="cs-k">Métrica</span><span class="cs-v">Carga / Peso vacío</span></div>
+          <div class="cs-row"><span class="cs-k">Dificultad</span><span class="cs-v">Alta</span></div>
+        </div>
+      </div>
+
+      <div class="clase-card reveal d2">
+        <span class="clase-badge">Advanced</span>
+        <div class="clase-name">Clase Advanced</div>
+        <p class="clase-desc">La categoría más compleja. Incluye misiones múltiples, sistemas de lanzamiento de carga y requisitos de vuelo autónomo parcial.</p>
+        <div class="clase-specs">
+          <div class="cs-row"><span class="cs-k">Misiones</span><span class="cs-v">Múltiples</span></div>
+          <div class="cs-row"><span class="cs-k">Enfoque</span><span class="cs-v">Sistemas complejos</span></div>
+          <div class="cs-row"><span class="cs-k">Dificultad</span><span class="cs-v">Muy alta</span></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── PUNTAJE ── -->
+  <section class="scoring">
+    <div class="scoring-inner">
+      <div class="scoring-header reveal">
+        <p class="section-label">// 03 · Evaluación</p>
+        <h2 class="section-title">Cómo se<br><span>califica.</span></h2>
+      </div>
+      <div class="scoring-grid">
+        <div class="score-block reveal">
+          <div class="score-pct">~50%</div>
+          <div class="score-name">Puntaje de vuelo</div>
+          <p class="score-desc">La razón entre la carga útil transportada y el peso en vacío de la aeronave. Es el componente más importante de la puntuación final.</p>
+        </div>
+        <div class="score-block reveal d1">
+          <div class="score-pct">~30%</div>
+          <div class="score-name">Reporte técnico</div>
+          <p class="score-desc">Calidad del reporte de diseño entregado antes del evento. Evalúa metodología, análisis y documentación de ingeniería.</p>
+        </div>
+        <div class="score-block reveal d2">
+          <div class="score-pct">~20%</div>
+          <div class="score-name">Presentación oral</div>
+          <p class="score-desc">Defensa del diseño ante jueces. Evalúa comprensión técnica del equipo y capacidad de comunicar decisiones de ingeniería.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FECHAS DEL EVENTO ── -->
+  <section class="evento" id="micro">
+    <div class="evento-inner">
+      <div class="evento-info reveal">
+        <p class="section-label">// 04 · El evento</p>
+        <h2 class="section-title" style="margin-bottom:24px;">SAE Aero<br>Design <span>2027.</span></h2>
+        <p>La competencia SAE Aero Design 2027 es nuestra meta. Tres días de ingeniería real, vuelos, inspecciones y presentaciones técnicas frente a profesionales de la industria aeronáutica.</p>
+        <br>
+        <div class="evento-dato">
+          <div class="dato-icon">📅</div>
+          <div>
+            <div class="dato-label">Fechas</div>
+            <div class="dato-val">12 – 14 de marzo de 2027</div>
+          </div>
+        </div>
+        <div class="evento-dato">
+          <div class="dato-icon">📍</div>
+          <div>
+            <div class="dato-label">Sede</div>
+            <div class="dato-val">Por confirmar — SAE International</div>
+          </div>
+        </div>
+        <div class="evento-dato">
+          <div class="dato-icon">✈</div>
+          <div>
+            <div class="dato-label">Categoría</div>
+            <div class="dato-val">Clase Micro · Primera participación Ibero CDMX</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="dias reveal d1">
+        <div class="dia-item">
+          <div>
+            <div class="dia-num">12</div>
+            <div class="dia-mes">Mar 2027</div>
+          </div>
+          <div>
+            <div class="dia-title">Registro e inspección técnica</div>
+            <p class="dia-desc">Entrega de la aeronave, inspección de seguridad y cumplimiento del reglamento. Presentación oral ante los jueces.</p>
+          </div>
+        </div>
+        <div class="dia-item">
+          <div>
+            <div class="dia-num">13</div>
+            <div class="dia-mes">Mar 2027</div>
+          </div>
+          <div>
+            <div class="dia-title">Vuelos de competencia</div>
+            <p class="dia-desc">Intentos de vuelo con carga útil. Cada equipo tiene múltiples oportunidades para demostrar el máximo rendimiento de su aeronave.</p>
+          </div>
+        </div>
+        <div class="dia-item">
+          <div>
+            <div class="dia-num">14</div>
+            <div class="dia-mes">Mar 2027</div>
+          </div>
+          <div>
+            <div class="dia-title">Vuelos finales y ceremonia</div>
+            <p class="dia-desc">Último día de vuelos, revisión de puntajes y ceremonia de premiación. Cierre del evento SAE Aero Design 2027.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CTA ── -->
+  <section class="cta-final">
+    <div class="cta-final-bg">2027</div>
+    <div class="cta-final-inner reveal">
+      <h2>¿Quieres ser parte del equipo?</h2>
+      <p>Buscamos estudiantes de ingeniería y disciplinas afines. No necesitas experiencia previa — necesitas ganas de construir algo real.</p>
+      <a href="unete.html" class="btn-white">Únete al equipo →</a>
+    </div>
+  </section>
+
+</main>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="footer-brand-logo">
+        <div class="logo-box">AD</div>
+        <div class="logo-text">
+          <div class="l1">SAE Aero Design</div>
+          <div class="l2">Ibero Ciudad de México · 2027</div>
+        </div>
+      </div>
+      <p>Equipo estudiantil de ingeniería aeronáutica de la Universidad Iberoamericana Ciudad de México. Primera participación en SAE Aero Design.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Proyecto</h4>
+      <ul>
+        <li><a href="proyecto.html">Sobre el proyecto</a></li>
+        <li><a href="competencia.html">SAE Aero Design</a></li>
+        <li><a href="competencia.html#micro">Clase Micro</a></li>
+        <li><a href="cronograma.html">Cronograma</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Equipo</h4>
+      <ul>
+        <li><a href="areas.html">Áreas de trabajo</a></li>
+        <li><a href="unete.html">Únete</a></li>
+        <li><a href="avances.html">Avances</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Colabora</h4>
+      <ul>
+        <li><a href="patrocinios.html">Patrocinios</a></li>
+        <li><a href="contacto.html">Contacto</a></li>
+        <li><a href="#">Instagram</a></li>
+        <li><a href="#">LinkedIn</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 SAE Aero Design · Ibero Ciudad de México</p>
+    <p>Universidad Iberoamericana · <a href="#">DEII</a></p>
+  </div>
+</footer>
+
+<script>
+  const burger  = document.getElementById('burger');
+  const navMenu = document.getElementById('navMenu');
+  burger.addEventListener('click', function(e) {
+    e.stopPropagation();
+    const isOpen = navMenu.classList.toggle('open');
+    burger.classList.toggle('open', isOpen);
+    burger.setAttribute('aria-expanded', isOpen);
+  });
+  document.addEventListener('click', function(e) {
+    if (!navMenu.contains(e.target) && !burger.contains(e.target)) {
+      navMenu.classList.remove('open');
+      burger.classList.remove('open');
+      burger.setAttribute('aria-expanded', 'false');
+    }
+  });
+
+  const els = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('on'); io.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  els.forEach(el => io.observe(el));
+</script>
+
+</body>
+</html>
