@@ -44,7 +44,11 @@
       height: 100%; display: flex; align-items: center; justify-content: space-between; gap: 24px;
     }
     .logo { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
-    .logo-box { width: 34px; height: 34px; background: var(--rojo); display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: .06em; }
+    .logo-img {
+    height: 34px;   
+    width: auto;
+    object-fit: contain;
+    }
     .logo-text .l1 { font-family: 'Bebas Neue', sans-serif; font-size: .9rem; letter-spacing: .1em; }
     .logo-text .l2 { font-family: 'DM Mono', monospace; font-size: .55rem; letter-spacing: .14em; color: var(--gris); margin-top: 1px; }
     .nav-links { display: flex; align-items: center; gap: 2px; list-style: none; flex: 1; justify-content: center; }
@@ -218,7 +222,7 @@
 <nav>
   <div class="nav-inner">
     <a href="index.html" class="logo">
-      <div class="logo-box">AD</div>
+      <img src="assets/lykaeros.png" alt="Lykaeros" class="logo-img" />
       <div class="logo-text">
         <div class="l1">SAE Aero Design</div>
         <div class="l2">Ibero CDMX · 2027</div>
